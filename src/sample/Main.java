@@ -12,6 +12,8 @@ public class Main extends Application{
         launch(args);
     }
 
+    public Stage fenetre;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
 

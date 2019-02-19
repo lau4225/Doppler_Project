@@ -1,7 +1,7 @@
 #borderPane{
 
 
-    -fx-background-image: url("sample/Mont_Bromo.jpg");
+   // -fx-background-image: url("sample/Mont_Bromo.jpg");
     -fx-background-repeat: stretch;
     -fx-background-size: 1920 1080;
     -fx-background-position: center center;

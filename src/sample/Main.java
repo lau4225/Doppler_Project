@@ -1,9 +1,7 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,9 +24,12 @@ public class Main extends Application{
 
         //SCENE1
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("sample/style.css");
 
         primaryStage.setTitle("Doppler Project");
-        primaryStage.setMaximized(true);
+        //primaryStage.setMaximized(true);
+        primaryStage.setMinWidth(700);
+        primaryStage.setMinHeight(500);
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);
 
@@ -49,7 +50,8 @@ public class Main extends Application{
         //SCENE2
         BorderPane root2 = new BorderPane();
 
-        Scene scene2  = new Scene(root2, 700, 500);
+        Scene scene2  = new Scene(root2, 700,500);
+        scene2.getStylesheets().add("sample/style.css");
 
         Button retour = new Button("Retour");
         Label instructions = new Label("INSTRUCTIONS À ÉCRIRE ICI" +

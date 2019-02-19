@@ -109,8 +109,8 @@ public class Main extends Application{
         //COMPOSANTES
         Label label = new Label("Vitesse éméteur");
         Label label2 = new Label("Vitesse récepteur");
-        Slider vitesseE = new Slider(0,20,0);
-        Slider vitesseR = new Slider(0,100,0);
+        Slider vitesseE = new Slider(-20,20,0);
+        Slider vitesseR = new Slider(-100,100,0);
         VBox sliders = new VBox(label, vitesseE, label2, vitesseR);
         sliders.setAlignment(Pos.CENTER_LEFT);
         root3.setLeft(sliders);

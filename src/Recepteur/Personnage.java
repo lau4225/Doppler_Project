@@ -53,25 +53,45 @@ public class Personnage extends Application {
     public void Marcher(){
 
     }
-
+    //c quoi so
     public Structure Protection(Structure protection){
 
         return protection;
     }
 
     //intensité
-    public void Entendre(){
+    //coalpha doit être en réalité intensité alpha
+    public double Entendre(Double intensieEmise, Double coAlpha){
 
+        double intensite = 0;
+
+        intensite = intensieEmise + coAlpha;
+
+        return intensite;
     }
 
     //fréquence perçue
-    //wtf
-    public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise, boolean sens){
+    public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise){
 
         double rep = 0;
-        double vitesseSon = 0;
+        double vitesseSon = 340;
 
-        rep = ((vitesseSon - vitesseRecep) / (vitesseSon - vitesseEmet))*frequenceEmise;
+        if (vitesseEmet > 0 && vitesseRecep > 0){
+
+            rep = ((vitesseSon + vitesseRecep) / (vitesseSon + vitesseEmet))*frequenceEmise;
+        }
+        if (vitesseEmet < 0 && vitesseRecep < 0){
+
+            rep = ((vitesseSon - vitesseRecep) / (vitesseSon - vitesseEmet))*frequenceEmise;
+        }
+        if (vitesseEmet < 0 && vitesseRecep > 0){
+
+            rep = ((vitesseSon + vitesseRecep) / (vitesseSon - vitesseEmet))*frequenceEmise;
+        }
+        if(vitesseEmet > 0 && vitesseRecep < 0){
+
+            rep = ((vitesseSon - vitesseRecep) / (vitesseSon + vitesseEmet))*frequenceEmise;
+        }
 
         return rep;
     }

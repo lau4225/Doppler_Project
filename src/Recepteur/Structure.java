@@ -20,7 +20,15 @@ public class Structure extends Application {
     private Image image;
     private int positionX;
     private int positionY;
+    private double vitesse;
 
+    public double getVitesse() {
+        return vitesse;
+    }
+
+    public void setVitesse(double vitesse) {
+        this.vitesse = vitesse;
+    }
     public String getNom() {
         return nom;
     }

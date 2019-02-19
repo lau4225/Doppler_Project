@@ -21,13 +21,13 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
-        BorderPane root = new BorderPane();
-
         //SCENE1
         //BASE
+        BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
+
         scene.getStylesheets().add("sample/style.css");
+
 
         primaryStage.setTitle("Doppler Project");
         //primaryStage.setMaximized(true);
@@ -54,7 +54,6 @@ public class Main extends Application{
         //SCENE2
         //BASE
         BorderPane root2 = new BorderPane();
-
         Scene scene2  = new Scene(root2, 700,500);
         scene2.getStylesheets().add("sample/style.css");
 

@@ -2,9 +2,7 @@ package sample;
 
 import Recepteur.*;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -23,12 +21,18 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        BorderPane root = new BorderPane();
+
         //SCENE1
         //BASE
-        BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("sample/style.css");
+
         primaryStage.setTitle("Doppler Project");
-        primaryStage.setMaximized(true);
+        //primaryStage.setMaximized(true);
+        primaryStage.setMinWidth(700);
+        primaryStage.setMinHeight(500);
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);
 
@@ -50,7 +54,9 @@ public class Main extends Application{
         //SCENE2
         //BASE
         BorderPane root2 = new BorderPane();
-        Scene scene2  = new Scene(root2, 700, 500);
+
+        Scene scene2  = new Scene(root2, 700,500);
+        scene2.getStylesheets().add("sample/style.css");
 
         //COMPOSANTES
         Button retour = new Button("Retour");

@@ -1,8 +1,13 @@
 package sample;
 
 import Recepteur.*;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -10,8 +15,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 
@@ -137,6 +145,33 @@ public class Main extends Application{
         result.setY(500);*/
 
 
+        //TIMELINE
+
+        Rectangle rectangle = new Rectangle();         //Laurie rendue ici, faire en sorte que le group prenne tout l'espace disponible du centre
+
+        Line horizon = new Line(0,600,700,600);
+        Circle cercle = new Circle(350,500,20); //represente doppler, a changer
+        cercle.setFill(Color.GREEN);
+        horizon.setStrokeWidth(5);
+
+
+        Timeline timeline = new Timeline();
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setAutoReverse(true);
+
+        KeyValue kv1 = new KeyValue(cercle.centerYProperty(),cercle.getCenterY()-50, Interpolator.EASE_IN);
+        KeyFrame kf1 = new KeyFrame(Duration.seconds(0.5), kv1);
+
+        timeline.getKeyFrames().addAll(kf1);
+
+        Group group = new Group(horizon, cercle);
+        VBox vBox1 = new VBox(group);
+        root3.setCenter(vBox1);
+
+
+
+
         //ONACTION
         guideUti.setOnAction(event -> {
             primaryStage.setScene(scene2);
@@ -148,6 +183,7 @@ public class Main extends Application{
 
         demarrer.setOnAction(event -> {
             primaryStage.setScene(scene3);
+            timeline.play();
         });
 
         quitter.setOnAction(event -> {

@@ -7,9 +7,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class Main extends Application{
 
@@ -109,8 +113,8 @@ public class Main extends Application{
         //COMPOSANTES
         Label label = new Label("Vitesse éméteur");
         Label label2 = new Label("Vitesse récepteur");
-        Slider vitesseE = new Slider(0,20,0);
-        Slider vitesseR = new Slider(0,100,0);
+        Slider vitesseE = new Slider(-20,20,0);
+        Slider vitesseR = new Slider(-100,100,0);
         VBox sliders = new VBox(label, vitesseE, label2, vitesseR);
         sliders.setAlignment(Pos.CENTER_LEFT);
         root3.setLeft(sliders);
@@ -176,26 +180,46 @@ public class Main extends Application{
 
         source1.setOnAction(event -> {
                 //ajuster la vitesse du slider
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         source2.setOnAction(event -> {
-
+            //pas son
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         source3.setOnAction(event -> {
-
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         source4.setOnAction(event -> {
-
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         source5.setOnAction(event -> {
-
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         source6.setOnAction(event -> {
-
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         primaryStage.show();

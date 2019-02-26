@@ -75,6 +75,7 @@ public class Source extends Application {
         this.image = image;
     }
 
+    //c quoi so
     public void Emettre(){
 
     }

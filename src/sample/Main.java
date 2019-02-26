@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -161,7 +162,7 @@ public class Main extends Application{
 
         timeline.getKeyFrames().addAll(kf1);
 
-        Group group = new Group(horizon, cercle);
+        Pane group = new Pane(horizon, cercle);
         VBox vBox1 = new VBox(group);
         root3.setCenter(vBox1);
 

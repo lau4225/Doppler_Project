@@ -1,15 +1,30 @@
 package sample;
 
 import Recepteur.*;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.io.File;
 
 public class Main extends Application{
 
@@ -19,42 +34,45 @@ public class Main extends Application{
 
     public Stage fenetre;
 
+    private static Timeline timeline = new Timeline();
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         //SCENE1
-        //BASE
+        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
 
         scene.getStylesheets().add("sample/style.css");
 
-
         primaryStage.setTitle("Doppler Project");
-        //primaryStage.setMaximized(true);
-        primaryStage.setMinWidth(700);
-        primaryStage.setMinHeight(500);
-        primaryStage.setResizable(true);
+        primaryStage.setWidth(screenSize.getWidth());
+        primaryStage.setHeight(screenSize.getHeight());
+        primaryStage.setMaximized(true);
+       // primaryStage.setResizable(true);
         primaryStage.setScene(scene);
 
         //COMPOSANTES
         Label titre = new Label("DOPPLER AU PAYS DES BRUITS");
-        titre.setAlignment(Pos.TOP_CENTER);
         Label noms = new Label("LAURIE BONNEL ET ANNABELLE DION");
-        noms.setAlignment(Pos.BOTTOM_CENTER);
         Button demarrer = new Button("DÉMARRER");
-        demarrer.setAlignment(Pos.CENTER);
         Button guideUti = new Button("GUIDE D'UTILISATION");
-        guideUti.setAlignment(Pos.CENTER);
-        root.setTop(titre);
-        root.setBottom(noms);
+
         VBox centre  = new VBox(demarrer, guideUti);
         centre.setAlignment(Pos.CENTER);
         root.setCenter(centre);
 
+        VBox top = new VBox(titre);
+        top.setAlignment(Pos.TOP_CENTER);
+        root.setTop(top);
+
+        VBox bottom = new VBox(noms);
+        bottom.setAlignment(Pos.BOTTOM_CENTER);
+        root.setBottom(bottom);
+
         //SCENE2
-        //BASE
         BorderPane root2 = new BorderPane();
-        Scene scene2  = new Scene(root2, 700,500);
+        Scene scene2  = new Scene(root2, screenSize.getWidth(), screenSize.getHeight());
         scene2.getStylesheets().add("sample/style.css");
 
         //COMPOSANTES
@@ -74,9 +92,19 @@ public class Main extends Application{
         root2.setCenter(vBox);
 
         //SCENE3
-        //BASE
         BorderPane root3 = new BorderPane();
-        Scene scene3 = new Scene(root3, 700, 500);
+        Scene scene3 = new Scene(root3, screenSize.getWidth(), screenSize.getHeight());
+        Image image = new Image("sample/Mont_Bromo.jpg");
+        ImageView fond = new ImageView(image);
+        BackgroundSize bSize = new BackgroundSize(screenSize.getWidth(), screenSize.getHeight(), false, false, true, false);
+        Background background = new Background(new BackgroundImage(image,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                bSize));
+
+        root3.setBackground(background);
+
 
         //CREATION DU MENU
         MenuBar menuBar = new MenuBar();
@@ -107,30 +135,63 @@ public class Main extends Application{
         doppler.setNom("Doppler");
 
         //COMPOSANTES
+        //vitesse sliders
         Label label = new Label("Vitesse éméteur");
         Label label2 = new Label("Vitesse récepteur");
-        Slider vitesseE = new Slider(0,20,0);
-        Slider vitesseR = new Slider(0,100,0);
+        Slider vitesseE = new Slider(-20,20,0);
+        Slider vitesseR = new Slider(-5,5,0);
         VBox sliders = new VBox(label, vitesseE, label2, vitesseR);
-        sliders.setAlignment(Pos.CENTER_LEFT);
+        sliders.setAlignment(Pos.CENTER);
         root3.setLeft(sliders);
         vitesseE.setShowTickMarks(true);
         vitesseE.setShowTickLabels(true);
         vitesseR.setShowTickMarks(true);
         vitesseR.setShowTickLabels(true);
-        //bind marche pas
-       // vitesseR.valueProperty().bind(doppler.setVitesse());
-        //vitesseE.valueProperty().bind();
 
-        Rectangle result = new Rectangle(50, 20);
+        Rectangle result = new Rectangle(150, 75);
         result.setStroke(Color.BLACK);
-        result.setFill(Color.WHITE);
+        result.setStrokeWidth(2);
+        result.setFill(Color.CHOCOLATE);
         Label label3 = new Label("Résultat");
         VBox resultat = new VBox(label3, result);
-        resultat.setAlignment(Pos.BOTTOM_RIGHT);
-        root3.setBottom(resultat);
-        /*result.setX(700);
-        result.setY(500);*/
+        //resultat.setTranslateY(800);
+        resultat.setAlignment(Pos.CENTER);
+        root3.setRight(resultat);
+
+        Image image2 = new Image("sample/téléchargement.png");
+        ImageView flag = new ImageView(image2);
+        root3.setCenter(flag);
+
+        //TIMELINE
+        //unité de vitesse
+        Rectangle rectangle = new Rectangle();
+        int end = 525;
+
+        Line horizon = new Line(157,925, 1483,925);
+        Circle cercle = new Circle(350,805,20); //represente doppler, a changer
+        cercle.setFill(Color.GREEN);
+        horizon.setStroke(Color.CHOCOLATE);
+        horizon.setStrokeWidth(200);
+
+        vitesseR.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            timeline.stop();
+            timeline = new Timeline();
+
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.setAutoReverse(true);
+            KeyValue kv2 = new KeyValue(cercle.centerYProperty(),825, Interpolator.EASE_IN);
+            KeyFrame kf2 = new KeyFrame(Duration.seconds(0), kv2);
+
+            KeyValue kv1 = new KeyValue(cercle.centerYProperty(),end, Interpolator.EASE_IN);
+            KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv1);
+            timeline.getKeyFrames().addAll(kf1, kf2);
+            timeline.play();
+        }));
+
+
+        Pane group = new Pane(horizon, cercle);
+        VBox vBox1 = new VBox(group);
+        root3.setCenter(vBox1);
 
 
         //ONACTION
@@ -176,26 +237,46 @@ public class Main extends Application{
 
         source1.setOnAction(event -> {
                 //ajuster la vitesse du slider
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         source2.setOnAction(event -> {
-
+            //pas son
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         source3.setOnAction(event -> {
-
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         source4.setOnAction(event -> {
-
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         source5.setOnAction(event -> {
-
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         source6.setOnAction(event -> {
-
+            String musicFile = "";
+            Media audio = new Media(new File(musicFile).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(audio);
+            mediaPlayer.play();
         });
 
         primaryStage.show();

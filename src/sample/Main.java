@@ -1,5 +1,6 @@
 package sample;
 
+import Emetteur.*;
 import Recepteur.*;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -35,6 +36,7 @@ public class Main extends Application{
     public Stage fenetre;
 
     private static Timeline timeline = new Timeline();
+    public static double frequenceRep;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -152,7 +154,7 @@ public class Main extends Application{
         result.setStroke(Color.BLACK);
         result.setStrokeWidth(2);
         result.setFill(Color.CHOCOLATE);
-        Label label3 = new Label("Résultat");
+        Label label3 = new Label("");
         VBox resultat = new VBox(label3, result);
         //resultat.setTranslateY(800);
         resultat.setAlignment(Pos.CENTER);
@@ -237,18 +239,28 @@ public class Main extends Application{
 
         source1.setOnAction(event -> {
                 //ajuster la vitesse du slider
-            String musicFile = "";
+            Ambulance ambulance = new Ambulance();
+            doppler.setSource(ambulance);
+
+           /* String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();
+            mediaPlayer.play();*/
+
+            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), ambulance.getFrequenceEmise());
+            label3.setText(String.valueOf(frequenceRep));
         });
 
         source2.setOnAction(event -> {
             //pas son
+            Avion avion = new Avion();
+            doppler.setSource(avion);
             String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
             mediaPlayer.play();
+
+            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), avion.getFrequenceEmise());
         });
 
         source3.setOnAction(event -> {
@@ -259,24 +271,39 @@ public class Main extends Application{
         });
 
         source4.setOnAction(event -> {
+            FeuxArtifice feuxArtifice = new FeuxArtifice();
+            doppler.setSource(feuxArtifice);
+
             String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
             mediaPlayer.play();
+
+           frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), feuxArtifice.getFrequenceEmise());
         });
 
         source5.setOnAction(event -> {
+            Marteau marteau = new Marteau();
+            doppler.setSource(marteau);
+
             String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
             mediaPlayer.play();
+
+            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), marteau.getFrequenceEmise());
         });
 
         source6.setOnAction(event -> {
+            Tondeuse tondeuse = new Tondeuse();
+            doppler.setSource(tondeuse);
+
             String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
             mediaPlayer.play();
+
+            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), tondeuse.getFrequenceEmise());
         });
 
         primaryStage.show();

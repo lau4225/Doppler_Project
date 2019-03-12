@@ -135,6 +135,11 @@ public class Main extends Application{
         //DOPPLER
         Personnage doppler = new Personnage();
         doppler.setNom("Doppler");
+        Image dopplerImage = new Image("Recepteur/doppler.png");
+        doppler.setImage(dopplerImage);
+        ImageView imageViewDoppler = new ImageView(dopplerImage);
+        imageViewDoppler.setPreserveRatio(true);
+        imageViewDoppler.setFitHeight(300);
 
         //COMPOSANTES
         //vitesse sliders
@@ -154,15 +159,25 @@ public class Main extends Application{
         result.setStroke(Color.BLACK);
         result.setStrokeWidth(2);
         result.setFill(Color.CHOCOLATE);
+        //à changer
         Label label3 = new Label("");
         VBox resultat = new VBox(label3, result);
         //resultat.setTranslateY(800);
         resultat.setAlignment(Pos.CENTER);
         root3.setRight(resultat);
 
+        //marche pas changer pour les background
         Image image2 = new Image("sample/téléchargement.png");
         ImageView flag = new ImageView(image2);
         root3.setCenter(flag);
+
+        //IMAGES
+        Image image1 = new Image("Emetteur/ambulance.png");
+        Image image3 = new Image("Emetteur/avion.png");
+        Image image4 = new Image("Emetteur/marteau-piqueur.png");
+        Image image5 = new Image("Emetteur/tondeuse.png");
+        ImageView imageView = new ImageView();
+       // doppler.setImage();
 
         //TIMELINE
         //unité de vitesse
@@ -170,10 +185,12 @@ public class Main extends Application{
         int end = 525;
 
         Line horizon = new Line(157,925, 1483,925);
-        Circle cercle = new Circle(350,805,20); //represente doppler, a changer
-        cercle.setFill(Color.GREEN);
+       /* Circle cercle = new Circle(350,805,20); //represente doppler, a changer
+        cercle.setFill(Color.GREEN);*/
         horizon.setStroke(Color.CHOCOLATE);
         horizon.setStrokeWidth(200);
+        imageViewDoppler.setX(350);
+        imageViewDoppler.setY(600);
 
         vitesseR.valueProperty().addListener(((observable, oldValue, newValue) -> {
             timeline.stop();
@@ -181,17 +198,46 @@ public class Main extends Application{
 
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.setAutoReverse(true);
-            KeyValue kv2 = new KeyValue(cercle.centerYProperty(),825, Interpolator.EASE_IN);
+            KeyValue kv2 = new KeyValue(imageViewDoppler.yProperty(),825, Interpolator.EASE_IN);
             KeyFrame kf2 = new KeyFrame(Duration.seconds(0), kv2);
 
-            KeyValue kv1 = new KeyValue(cercle.centerYProperty(),end, Interpolator.EASE_IN);
-            KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv1);
-            timeline.getKeyFrames().addAll(kf1, kf2);
-            timeline.play();
+            KeyValue kv1 = new KeyValue(imageViewDoppler.yProperty(),end, Interpolator.EASE_IN);
+            try{
+                KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv1);
+                timeline.getKeyFrames().addAll(kf1, kf2);
+                timeline.play();
+            }
+            catch (ArithmeticException e){
+                System.out.println("division par 0");
+            }
+
+        }));
+
+        imageView.setX(1000);
+        imageView.setY(600);
+
+        vitesseE.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            timeline.stop();
+            timeline = new Timeline();
+
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            KeyValue kv2 = new KeyValue(imageView.xProperty(),200, Interpolator.EASE_IN);
+            KeyFrame kf2 = new KeyFrame(Duration.seconds(0), kv2);
+
+            //KeyValue kv1 = new KeyValue(imageView.xProperty(),end, Interpolator.EASE_IN);
+            try{
+                KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv2);
+                timeline.getKeyFrames().addAll(kf1, kf2);
+                timeline.play();
+            }
+            catch (ArithmeticException e){
+                System.out.println("division par 0");
+            }
+
         }));
 
 
-        Pane group = new Pane(horizon, cercle);
+        Pane group = new Pane(horizon, imageViewDoppler, imageView);
         VBox vBox1 = new VBox(group);
         root3.setCenter(vBox1);
 
@@ -241,6 +287,9 @@ public class Main extends Application{
                 //ajuster la vitesse du slider
             Ambulance ambulance = new Ambulance();
             doppler.setSource(ambulance);
+            imageView.setImage(image1);
+            ambulance.setImage(image1);
+
 
            /* String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
@@ -255,6 +304,9 @@ public class Main extends Application{
             //pas son
             Avion avion = new Avion();
             doppler.setSource(avion);
+            imageView.setImage(image3);
+            avion.setImage(image3);
+
             String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
@@ -285,6 +337,8 @@ public class Main extends Application{
         source5.setOnAction(event -> {
             Marteau marteau = new Marteau();
             doppler.setSource(marteau);
+            imageView.setImage(image4);
+            marteau.setImage(image4);
 
             String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
@@ -297,6 +351,8 @@ public class Main extends Application{
         source6.setOnAction(event -> {
             Tondeuse tondeuse = new Tondeuse();
             doppler.setSource(tondeuse);
+            imageView.setImage(image5);
+            tondeuse.setImage(image5);
 
             String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());

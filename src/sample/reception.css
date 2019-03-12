@@ -1,7 +1,7 @@
-#borderPane{
+.BorderPane{
 
 
-    -fx-background-image: url("sample/Mont_Bromo.jpg");
+    -fx-background-color: aqua;
     -fx-background-repeat: stretch;
     -fx-background-size: 1920 1080;
     -fx-background-position: center center;
@@ -12,14 +12,14 @@
 .button{
     -fx-font-style: normal;
     -fx-font: 20 "Calibri" ;
-    -fx-background-color: lawngreen;
+    -fx-background-color: deepskyblue;
     -fx-text-fill: black;
 }
 
 .label{
     -fx-font-style: normal;
     -fx-font: 20 "Calibri" ;
-    -fx-background-color: lawngreen;
+    -fx-background-color: deepskyblue;
     -fx-text-fill: black;
 }
 
@@ -50,5 +50,6 @@
     -fx-text-fill: darkslategrey;
     -fx-prompt-text-fill: wheat;
 }
+
 
 

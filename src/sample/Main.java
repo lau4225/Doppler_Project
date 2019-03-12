@@ -8,7 +8,6 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -43,7 +42,7 @@ public class Main extends Application{
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
 
-        scene.getStylesheets().add("sample/style.css");
+        scene.getStylesheets().add("sample/reception.css");
 
         primaryStage.setTitle("Doppler Project");
         primaryStage.setWidth(screenSize.getWidth());
@@ -73,7 +72,7 @@ public class Main extends Application{
         //SCENE2
         BorderPane root2 = new BorderPane();
         Scene scene2  = new Scene(root2, screenSize.getWidth(), screenSize.getHeight());
-        scene2.getStylesheets().add("sample/style.css");
+        scene2.getStylesheets().add("sample/reception.css");
 
         //COMPOSANTES
         Button retour = new Button("Retour");
@@ -94,6 +93,7 @@ public class Main extends Application{
         //SCENE3
         BorderPane root3 = new BorderPane();
         Scene scene3 = new Scene(root3, screenSize.getWidth(), screenSize.getHeight());
+        scene3.getStylesheets().add("sample/game.css");
         Image image = new Image("sample/Mont_Bromo.jpg");
         ImageView fond = new ImageView(image);
         BackgroundSize bSize = new BackgroundSize(screenSize.getWidth(), screenSize.getHeight(), false, false, true, false);
@@ -158,7 +158,8 @@ public class Main extends Application{
         resultat.setAlignment(Pos.CENTER);
         root3.setRight(resultat);
 
-        Image image2 = new Image("sample/téléchargement.png");
+        Image image2 = new Image("sample/bonhomme.jpg"); // C'est quelle image ?? il faudra la mettre dans le package sample
+        //je l'ai changé pour pouvoir runner
         ImageView flag = new ImageView(image2);
         root3.setCenter(flag);
 
@@ -183,9 +184,18 @@ public class Main extends Application{
             KeyFrame kf2 = new KeyFrame(Duration.seconds(0), kv2);
 
             KeyValue kv1 = new KeyValue(cercle.centerYProperty(),end, Interpolator.EASE_IN);
-            KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv1);
-            timeline.getKeyFrames().addAll(kf1, kf2);
-            timeline.play();
+
+            try{
+                KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv1);
+                timeline.getKeyFrames().addAll(kf1, kf2);
+                timeline.play();
+
+            }catch (ArithmeticException e){
+                System.out.println("Exception de division par 0");
+            }
+
+
+
         }));
 
 

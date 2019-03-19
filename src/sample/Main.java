@@ -2,10 +2,7 @@ package sample;
 
 import Emetteur.*;
 import Recepteur.*;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -162,7 +159,6 @@ public class Main extends Application{
         //à changer
         Label label3 = new Label("");
         VBox resultat = new VBox(label3, result);
-        //resultat.setTranslateY(800);
         resultat.setAlignment(Pos.CENTER);
         root3.setRight(resultat);
 
@@ -177,63 +173,84 @@ public class Main extends Application{
         Image image4 = new Image("Emetteur/marteau-piqueur.png");
         Image image5 = new Image("Emetteur/tondeuse.png");
         ImageView imageView = new ImageView();
-       // doppler.setImage();
+        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(300);
 
         //TIMELINE
         //unité de vitesse
         Rectangle rectangle = new Rectangle();
-        int end = 525;
 
         Line horizon = new Line(157,925, 1483,925);
-       /* Circle cercle = new Circle(350,805,20); //represente doppler, a changer
-        cercle.setFill(Color.GREEN);*/
         horizon.setStroke(Color.CHOCOLATE);
         horizon.setStrokeWidth(200);
         imageViewDoppler.setX(350);
-        imageViewDoppler.setY(600);
+        imageViewDoppler.setY(650);
+        imageView.setX(900);
+        imageView.setY(600);
 
         vitesseR.valueProperty().addListener(((observable, oldValue, newValue) -> {
+
             timeline.stop();
             timeline = new Timeline();
 
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.setAutoReverse(true);
-            KeyValue kv2 = new KeyValue(imageViewDoppler.yProperty(),825, Interpolator.EASE_IN);
+            KeyValue kv2 = new KeyValue(imageViewDoppler.yProperty(),600, Interpolator.EASE_IN);
             KeyFrame kf2 = new KeyFrame(Duration.seconds(0), kv2);
 
-            KeyValue kv1 = new KeyValue(imageViewDoppler.yProperty(),end, Interpolator.EASE_IN);
+            KeyValue kv1 = new KeyValue(imageViewDoppler.yProperty(),700, Interpolator.EASE_IN);
             try{
                 KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv1);
                 timeline.getKeyFrames().addAll(kf1, kf2);
                 timeline.play();
+
+                frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise());
+                label3.setText(String.valueOf(frequenceRep));
             }
             catch (ArithmeticException e){
                 System.out.println("division par 0");
             }
-
         }));
 
-        imageView.setX(1000);
-        imageView.setY(600);
 
         vitesseE.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            timeline.stop();
-            timeline = new Timeline();
 
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            KeyValue kv2 = new KeyValue(imageView.xProperty(),200, Interpolator.EASE_IN);
-            KeyFrame kf2 = new KeyFrame(Duration.seconds(0), kv2);
+            //la source avance encore
 
-            //KeyValue kv1 = new KeyValue(imageView.xProperty(),end, Interpolator.EASE_IN);
+            TranslateTransition trans  = new TranslateTransition(
+                    Duration.seconds(20/ Math.abs( newValue.doubleValue())), imageView);
+            trans.setByX(-200);
+
+            TranslateTransition resetTrans = new TranslateTransition(Duration.millis(1), imageView);
+            resetTrans.setByX(trans.getByX());
+
+            SequentialTransition seqTrans = new SequentialTransition(trans, resetTrans);
+            seqTrans.setCycleCount(Timeline.INDEFINITE);
+            seqTrans.play();
+
+
+            FadeTransition fade = new FadeTransition(
+                    Duration.seconds(20/ Math.abs( newValue.doubleValue())), imageView);
+            fade.setFromValue(1.0);
+            fade.setToValue(0);
+
+            FadeTransition resetFade = new FadeTransition(
+                    Duration.millis(1), imageView);
+            resetFade.setFromValue(0);
+            resetFade.setToValue(1);
+
+            SequentialTransition seqFade = new SequentialTransition(fade, resetFade);
+            seqFade.setCycleCount(Timeline.INDEFINITE);
+            seqFade.play();
+
             try{
-                KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv2);
-                timeline.getKeyFrames().addAll(kf1, kf2);
-                timeline.play();
+
+                frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise());
+                label3.setText(String.valueOf(frequenceRep));
             }
             catch (ArithmeticException e){
                 System.out.println("division par 0");
             }
-
         }));
 
 
@@ -266,6 +283,8 @@ public class Main extends Application{
         structure1.setOnAction(event -> {
             Bouchons bouchons = new Bouchons();
             doppler.setProtectActiv(bouchons);
+            vitesseE.setMin(-200);
+            vitesseR.setMax(200);
         });
 
         structure2.setOnAction(event -> {
@@ -290,14 +309,12 @@ public class Main extends Application{
             imageView.setImage(image1);
             ambulance.setImage(image1);
 
-
            /* String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
             mediaPlayer.play();*/
 
-            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), ambulance.getFrequenceEmise());
-            label3.setText(String.valueOf(frequenceRep));
+
         });
 
         source2.setOnAction(event -> {

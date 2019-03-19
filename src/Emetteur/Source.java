@@ -14,6 +14,7 @@ public class Source extends Application {
     private String nom;
     private double frequenceEmise;
     private double vitesse;
+    //intensité en décibels
     private double IntensiteEmise;
     private boolean cercleOndes;
     private Audio son;
@@ -75,6 +76,7 @@ public class Source extends Application {
         this.image = image;
     }
 
+    //c quoi so
     public void Emettre(){
 
     }

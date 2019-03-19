@@ -1,5 +1,6 @@
 package Recepteur;
 
+import Emetteur.Source;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -17,6 +18,15 @@ public class Personnage extends Application {
     private double vitesse;
     private Image image;
     private Structure protectActiv;
+    private Source source;
+
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
+    }
 
     public String getNom() {
         return nom;
@@ -53,25 +63,56 @@ public class Personnage extends Application {
     public void Marcher(){
 
     }
-
+    //c quoi so
     public Structure Protection(Structure protection){
 
         return protection;
     }
 
     //intensité
-    public void Entendre(){
+    //on laisse tout en décibels
+    //besoin d'une méthode pour calculer décibels selon fréquence des structures
+    public double Entendre(Double intensieEmise, Double coAlpha){
 
+        double intensite = 0;
+
+        intensite = intensieEmise - coAlpha;
+
+        return intensite;
     }
 
     //fréquence perçue
-    //wtf
-    public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise, boolean sens){
+    //ajouter le vent
+    public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise){
 
         double rep = 0;
-        double vitesseSon = 0;
+        double vE = 0;
+        double vR = 0;
+        double vitesseSon = 340;
 
-        rep = ((vitesseSon - vitesseRecep) / (vitesseSon - vitesseEmet))*frequenceEmise;
+        if (vitesseEmet > 0 && vitesseRecep > 0){
+
+            rep = ((vitesseSon + vitesseRecep) / (vitesseSon + vitesseEmet))*frequenceEmise;
+        }
+        if (vitesseEmet < 0 && vitesseRecep < 0){
+
+            vE =  Math.abs(vitesseEmet);
+            vR = Math.abs(vitesseRecep);
+
+            rep = ((vitesseSon - vR) / (vitesseSon - vE))*frequenceEmise;
+        }
+        if (vitesseEmet < 0 && vitesseRecep > 0){
+
+            vE = Math.abs(vitesseEmet);
+
+            rep = ((vitesseSon + vitesseRecep) / (vitesseSon - vE))*frequenceEmise;
+        }
+        if(vitesseEmet > 0 && vitesseRecep < 0){
+
+            vR = Math.abs(vitesseRecep);
+
+            rep = ((vitesseSon - vR) / (vitesseSon + vitesseEmet))*frequenceEmise;
+        }
 
         return rep;
     }

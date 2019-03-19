@@ -82,6 +82,7 @@ public class Personnage extends Application {
     }
 
     //fréquence perçue
+    //ajouter le vent
     public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise){
 
         double rep = 0;

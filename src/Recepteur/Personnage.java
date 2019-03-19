@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.text.DecimalFormat;
+
 public class Personnage extends Application {
 
     //methode return
@@ -88,11 +90,11 @@ public class Personnage extends Application {
         double rep = 0;
         double vE = 0;
         double vR = 0;
-        double vitesseSon = 340;
+        double vitesseSon = 1235;
 
         if (vitesseEmet > 0 && vitesseRecep > 0){
 
-            rep = ((vitesseSon + vitesseRecep) / (vitesseSon + vitesseEmet))*frequenceEmise;
+            rep = (vitesseSon + vitesseRecep) / (vitesseSon + vitesseEmet)*frequenceEmise;
         }
         if (vitesseEmet < 0 && vitesseRecep < 0){
 
@@ -113,6 +115,9 @@ public class Personnage extends Application {
 
             rep = ((vitesseSon - vR) / (vitesseSon + vitesseEmet))*frequenceEmise;
         }
+/*
+        DecimalFormat df = new DecimalFormat("####.##");
+        df.format(rep);*/
 
         return rep;
     }

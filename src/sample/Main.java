@@ -97,6 +97,7 @@ public class Main extends Application{
         Scene scene3 = new Scene(root3, screenSize.getWidth(), screenSize.getHeight());
         scene3.getStylesheets().add("sample/game.css");
         Image image = new Image("sample/Mont_Bromo.jpg");
+        scene3.getStylesheets().add("sample/game.css");
         ImageView fond = new ImageView(image);
         BackgroundSize bSize = new BackgroundSize(screenSize.getWidth(), screenSize.getHeight(), false, false, true, false);
         Background background = new Background(new BackgroundImage(image,

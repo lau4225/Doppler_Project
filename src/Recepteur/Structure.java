@@ -1,10 +1,11 @@
 package Recepteur;
 
+import Emetteur.Source;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class Structure extends Application {
+public abstract class Structure extends Application {
 
     //revoir pour autres structures
 
@@ -69,5 +70,6 @@ public class Structure extends Application {
         this.positionY = positionY;
     }
 
+    public abstract double Isolation(Source source);
 
 }

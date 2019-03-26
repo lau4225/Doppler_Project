@@ -5,8 +5,6 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.text.DecimalFormat;
-
 public class Personnage extends Application {
 
     //methode return
@@ -20,7 +18,7 @@ public class Personnage extends Application {
     private double vitesse;
     private Image image;
     //probablement supprimer
-    private Structure protectActiv;
+    private Structure structure;
     private Source source;
 
     public Source getSource() {
@@ -55,23 +53,32 @@ public class Personnage extends Application {
         this.image = image;
     }
 
-    public Structure getProtectActiv() {
-        return protectActiv;
+    public Structure getStructure() {
+        return structure;
     }
 
-    public void setProtectActiv(Structure protectActiv) {
-        this.protectActiv = protectActiv;
+    public void setStructure(Structure structure) {
+        this.structure = structure;
     }
 
 
     //fréquence perçue
     //ajouter le vent
-    public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise){
+    public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise, double vent){
 
         double rep = 0;
         double vE = 0;
         double vR = 0;
-        double vitesseSon = 1235;
+        double vitesseSon = 0;
+
+        if (vent < 0){
+
+            vitesseSon = 1235 - Math.abs(vent);
+        }
+        else if (vent > 0){
+
+            vitesseSon = 1235 + vent;
+        }
 
         if (vitesseEmet > 0 && vitesseRecep > 0){
 

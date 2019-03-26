@@ -43,8 +43,7 @@ public class Main extends Application{
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
-
-        scene.getStylesheets().add("sample/style.css");
+        scene.getStylesheets().add("sample/reception.css");
 
         primaryStage.setTitle("Doppler Project");
         primaryStage.setWidth(screenSize.getWidth());
@@ -73,7 +72,7 @@ public class Main extends Application{
         //SCENE2
         BorderPane root2 = new BorderPane();
         Scene scene2  = new Scene(root2, screenSize.getWidth(), screenSize.getHeight());
-        scene2.getStylesheets().add("sample/style.css");
+        scene2.getStylesheets().add("sample/reception.css");
 
         //COMPOSANTES
         Button retour = new Button("Retour");
@@ -95,6 +94,7 @@ public class Main extends Application{
         BorderPane root3 = new BorderPane();
         Scene scene3 = new Scene(root3, screenSize.getWidth(), screenSize.getHeight());
         Image image = new Image("sample/Mont_Bromo.jpg");
+        scene3.getStylesheets().add("sample/game.css");
         ImageView fond = new ImageView(image);
         BackgroundSize bSize = new BackgroundSize(screenSize.getWidth(), screenSize.getHeight(), false, false, true, false);
         Background background = new Background(new BackgroundImage(image,

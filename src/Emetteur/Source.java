@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class Source extends Application {
+public abstract class Source extends Application {
 
     @Override
     public void start(Stage primaryStage) {
@@ -76,15 +76,6 @@ public class Source extends Application {
         this.image = image;
     }
 
-    //c quoi so
-    public void Emettre(){
-
-    }
-
-    public void Deplacer(){
-
-    }
-
     public void frontOndes(){
 
     }
@@ -92,4 +83,5 @@ public class Source extends Application {
     public void effetSonores(){
 
     }
+
 }

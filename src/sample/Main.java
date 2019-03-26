@@ -35,6 +35,7 @@ public class Main extends Application{
     SequentialTransition seqTrans = new SequentialTransition();
     SequentialTransition seqFade = new SequentialTransition();
     public static double frequenceRep;
+    public static int entier;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -44,7 +45,7 @@ public class Main extends Application{
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
 
-        scene.getStylesheets().add("sample/style.css");
+        scene.getStylesheets().add("sample/reception.css");
 
         primaryStage.setTitle("Doppler Project");
         primaryStage.setWidth(screenSize.getWidth());
@@ -73,7 +74,7 @@ public class Main extends Application{
         //SCENE2
         BorderPane root2 = new BorderPane();
         Scene scene2  = new Scene(root2, screenSize.getWidth(), screenSize.getHeight());
-        scene2.getStylesheets().add("sample/style.css");
+        scene2.getStylesheets().add("sample/reception.css");
 
         //COMPOSANTES
         Button retour = new Button("Retour");
@@ -94,6 +95,7 @@ public class Main extends Application{
         //SCENE3
         BorderPane root3 = new BorderPane();
         Scene scene3 = new Scene(root3, screenSize.getWidth(), screenSize.getHeight());
+        scene3.getStylesheets().add("sample/game.css");
         Image image = new Image("sample/Mont_Bromo.jpg");
         ImageView fond = new ImageView(image);
         BackgroundSize bSize = new BackgroundSize(screenSize.getWidth(), screenSize.getHeight(), false, false, true, false);
@@ -155,13 +157,13 @@ public class Main extends Application{
         vitesseR.setMajorTickUnit(5);
         vitesseR.setMinorTickCount(0);
 
-       /* Rectangle result = new Rectangle(150, 75);
-        result.setStroke(Color.BLACK);
-        result.setStrokeWidth(2);
-        result.setFill(Color.CHOCOLATE);*/
-
         //Améliorer l'apparence
         Label label3 = new Label("Résultats");
+
+        Label intesitePercue = new Label("Intensité perçue : ");
+        Label intensiteValue = new Label("0");
+        Label intensiteUnit = new Label(" dB");
+        HBox intensite = new HBox(intesitePercue, intensiteValue, intensiteUnit);
 
         Label frequence = new Label("Fréquence perçue : ");
         Label frequenceValue = new Label("0");
@@ -183,7 +185,7 @@ public class Main extends Application{
         Label vitesseRecepteurUnit = new Label(" km/h");
         HBox hBoxRecepteur = new HBox(vitesseRecepteur, vitesseRecepteurValue, vitesseRecepteurUnit);
 
-        VBox vBoxResultats = new VBox(hBoxFreq, hBoxEmise, hBoxEmetteur, hBoxRecepteur);
+        VBox vBoxResultats = new VBox(intensite, hBoxFreq, hBoxEmise, hBoxEmetteur, hBoxRecepteur);
 
         VBox resultat = new VBox(label3, vBoxResultats);
         resultat.setAlignment(Pos.CENTER);
@@ -230,7 +232,7 @@ public class Main extends Application{
 
             KeyValue kv1 = new KeyValue(imageViewDoppler.yProperty(),700, Interpolator.EASE_IN);
             try{
-                KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv1);
+                KeyFrame kf1 = new KeyFrame(Duration.seconds(5/ Math.abs( newValue.doubleValue())), kv1);
                 timeline.getKeyFrames().addAll(kf1, kf2);
                 timeline.play();
 
@@ -248,15 +250,13 @@ public class Main extends Application{
 
         vitesseE.valueProperty().addListener(((observable, oldValue, newValue) -> {
 
-            //la source avance encore
-
             vitesseEmetteurValue.setText(String.valueOf(Math.round(vitesseE.getValue())));
             seqFade.stop();
             seqTrans.stop();
             imageView.setTranslateX(0);
 
             TranslateTransition trans  = new TranslateTransition(
-                    Duration.seconds(20/ Math.abs( newValue.doubleValue())), imageView);
+                    Duration.seconds(entier/ Math.abs( newValue.doubleValue())), imageView);
             trans.setByX(-200);
 
             TranslateTransition resetTrans = new TranslateTransition(Duration.millis(1), imageView);
@@ -268,7 +268,7 @@ public class Main extends Application{
 
 
             FadeTransition fade = new FadeTransition(
-                    Duration.seconds(20/ Math.abs( newValue.doubleValue())), imageView);
+                    Duration.seconds(entier/ Math.abs( newValue.doubleValue())), imageView);
             fade.setFromValue(1.0);
             fade.setToValue(0);
 
@@ -315,12 +315,26 @@ public class Main extends Application{
         });
 
         reinitialiser.setOnAction(event -> {
+           frequenceValue.setText("0");
+           frequenceEmiseValue.setText("0");
+           vitesseEmetteurValue.setText("0");
+           vitesseRecepteurValue.setText("0");
+           intensiteValue.setText("0");
+
+           vitesseE.setValue(0);
+           vitesseR.setValue(0);
+           vitesseE.setMin(0);
+           vitesseE.setMax(0);
+
+           imageView.setImage(null);
 
         });
 
         structure1.setOnAction(event -> {
             Bouchons bouchons = new Bouchons();
             doppler.setProtectActiv(bouchons);
+
+           intensiteValue.setText(String.valueOf(bouchons.Isolation(doppler.getSource())));
 
         });
 
@@ -340,16 +354,18 @@ public class Main extends Application{
         });
 
         source1.setOnAction(event -> {
-                //ajuster la vitesse du slider
             Ambulance ambulance = new Ambulance();
             doppler.setSource(ambulance);
             imageView.setImage(image1);
             ambulance.setImage(image1);
+            intensiteValue.setText(String.valueOf(ambulance.getIntensiteEmise()));
 
-            vitesseE.setMin(-200);
-            vitesseE.setMax(200);
+            vitesseE.setMin(-150);
+            vitesseE.setMax(150);
             vitesseE.setMajorTickUnit(50);
             vitesseE.setMinorTickCount(0);
+
+            entier = 50;
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
@@ -368,11 +384,14 @@ public class Main extends Application{
             doppler.setSource(avion);
             imageView.setImage(image3);
             avion.setImage(image3);
+            intensiteValue.setText(String.valueOf(avion.getIntensiteEmise()));
 
             vitesseE.setMin(-1000);
             vitesseE.setMax(1000);
-            vitesseE.setMajorTickUnit(200);
+            vitesseE.setMajorTickUnit(500);
             vitesseE.setMinorTickCount(0);
+
+            entier = 400;
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
@@ -394,6 +413,7 @@ public class Main extends Application{
         source4.setOnAction(event -> {
             FeuxArtifice feuxArtifice = new FeuxArtifice();
             doppler.setSource(feuxArtifice);
+            intensiteValue.setText(String.valueOf(feuxArtifice.getIntensiteEmise()));
 
             vitesseE.setMin(0);
             vitesseE.setMax(0);
@@ -415,11 +435,14 @@ public class Main extends Application{
             doppler.setSource(marteau);
             imageView.setImage(image4);
             marteau.setImage(image4);
+            intensiteValue.setText(String.valueOf(marteau.getIntensiteEmise()));
 
             vitesseE.setMin(-5);
             vitesseE.setMax(5);
             vitesseE.setMajorTickUnit(1);
             vitesseE.setMinorTickCount(0);
+
+            entier = 5;
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
@@ -436,11 +459,14 @@ public class Main extends Application{
             doppler.setSource(tondeuse);
             imageView.setImage(image5);
             tondeuse.setImage(image5);
+            intensiteValue.setText(String.valueOf(tondeuse.getIntensiteEmise()));
 
             vitesseE.setMin(-5);
             vitesseE.setMax(5);
             vitesseE.setMajorTickUnit(1);
             vitesseE.setMinorTickCount(0);
+
+            entier = 5;
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 

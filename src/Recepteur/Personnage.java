@@ -19,6 +19,7 @@ public class Personnage extends Application {
     private String nom;
     private double vitesse;
     private Image image;
+    //probablement supprimer
     private Structure protectActiv;
     private Source source;
 
@@ -62,26 +63,6 @@ public class Personnage extends Application {
         this.protectActiv = protectActiv;
     }
 
-    public void Marcher(){
-
-    }
-    //c quoi so
-    public Structure Protection(Structure protection){
-
-        return protection;
-    }
-
-    //intensité
-    //on laisse tout en décibels
-    //besoin d'une méthode pour calculer décibels selon fréquence des structures
-    public double Entendre(Double intensieEmise, Double coAlpha){
-
-        double intensite = 0;
-
-        intensite = intensieEmise - coAlpha;
-
-        return intensite;
-    }
 
     //fréquence perçue
     //ajouter le vent
@@ -115,9 +96,7 @@ public class Personnage extends Application {
 
             rep = ((vitesseSon - vR) / (vitesseSon + vitesseEmet))*frequenceEmise;
         }
-/*
-        DecimalFormat df = new DecimalFormat("####.##");
-        df.format(rep);*/
+
 
         return rep;
     }

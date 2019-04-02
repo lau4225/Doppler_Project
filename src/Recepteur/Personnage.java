@@ -61,26 +61,24 @@ public class Personnage extends Application {
         this.structure = structure;
     }
 
-
-    //fréquence perçue
-    //ajouter le vent
+    //revérifier calcul = 0
     public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise, double vent){
 
         double rep = 0;
         double vE = 0;
         double vR = 0;
-        double vitesseSon = 0;
+        double vitesseSon = 1235;
 
         if (vent < 0){
 
-            vitesseSon = 1235 - Math.abs(vent);
+            vitesseSon = vitesseSon - Math.abs(vent);
         }
         else if (vent > 0){
 
-            vitesseSon = 1235 + vent;
+            vitesseSon = vitesseSon + vent;
         }
 
-        if (vitesseEmet > 0 && vitesseRecep > 0){
+        if (vitesseEmet >= 0 && vitesseRecep >= 0){
 
             rep = (vitesseSon + vitesseRecep) / (vitesseSon + vitesseEmet)*frequenceEmise;
         }
@@ -91,13 +89,13 @@ public class Personnage extends Application {
 
             rep = ((vitesseSon - vR) / (vitesseSon - vE))*frequenceEmise;
         }
-        if (vitesseEmet < 0 && vitesseRecep > 0){
+        if (vitesseEmet < 0 && vitesseRecep >= 0){
 
             vE = Math.abs(vitesseEmet);
 
             rep = ((vitesseSon + vitesseRecep) / (vitesseSon - vE))*frequenceEmise;
         }
-        if(vitesseEmet > 0 && vitesseRecep < 0){
+        if(vitesseEmet >= 0 && vitesseRecep < 0){
 
             vR = Math.abs(vitesseRecep);
 

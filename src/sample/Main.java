@@ -94,6 +94,7 @@ public class Main extends Application{
         BorderPane root3 = new BorderPane();
         Scene scene3 = new Scene(root3, screenSize.getWidth(), screenSize.getHeight());
         Image image = new Image("sample/Mont_Bromo.jpg"); //ratio 2 880 X 1920 = 1,5
+        ImageView fond = new ImageView(image);
         scene3.getStylesheets().add("sample/game.css");
         BackgroundSize bSize = new BackgroundSize(screenSize.getWidth(), screenSize.getHeight(), false, false, true, false);
         Background background = new Background(new BackgroundImage(image,
@@ -522,10 +523,10 @@ public class Main extends Application{
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-            String musicFile = "";
+           /* String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();
+            mediaPlayer.play();*/
 
             frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), marteau.getFrequenceEmise(), vent.getValue());
         });
@@ -546,10 +547,10 @@ public class Main extends Application{
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-            String musicFile = "";
+         /*   String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();
+            mediaPlayer.play();*/
 
             frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), tondeuse.getFrequenceEmise(), vent.getValue());
         });

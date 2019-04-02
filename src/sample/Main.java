@@ -4,6 +4,7 @@ import Emetteur.*;
 import Recepteur.*;
 import javafx.animation.*;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -93,9 +94,8 @@ public class Main extends Application{
         //SCENE3
         BorderPane root3 = new BorderPane();
         Scene scene3 = new Scene(root3, screenSize.getWidth(), screenSize.getHeight());
-        Image image = new Image("sample/Mont_Bromo.jpg");
+        Image image = new Image("sample/Mont_Bromo.jpg"); //ratio 2 880 X 1920 = 1,5
         scene3.getStylesheets().add("sample/game.css");
-        ImageView fond = new ImageView(image);
         BackgroundSize bSize = new BackgroundSize(screenSize.getWidth(), screenSize.getHeight(), false, false, true, false);
         Background background = new Background(new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT,
@@ -188,11 +188,12 @@ public class Main extends Application{
         VBox resultat = new VBox(label3, vBoxResultats);
         resultat.setAlignment(Pos.CENTER);
         root3.setRight(resultat);
+        root3.setPadding(new Insets(0,10,0,10));
 
-        //marche pas changer pour les background
+        /*marche pas changer pour les background
         Image image2 = new Image("sample/téléchargement.png");
         ImageView flag = new ImageView(image2);
-        root3.setCenter(flag);
+        root3.setCenter(flag);                                              À SUPPRIMER */
 
         //IMAGES
         Image image1 = new Image("Emetteur/ambulance.png");
@@ -206,13 +207,19 @@ public class Main extends Application{
         //TIMELINE
         Rectangle rectangle = new Rectangle();
 
-        Line horizon = new Line(157,925, 1483,925);
+        Line horizon = new Line(0,
+                (screenSize.getHeight()- (screenSize.getHeight()/8)),
+                 screenSize.getWidth()-275,
+                (screenSize.getHeight()-((screenSize.getHeight()/8))));
         horizon.setStroke(Color.CHOCOLATE);
-        horizon.setStrokeWidth(200);
+        horizon.setStrokeWidth(screenSize.getHeight()/7);
         imageViewDoppler.setX(350);
-        imageViewDoppler.setY(650);
-        imageView.setX(900);
-        imageView.setY(600);
+        imageViewDoppler.setY(screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())));   //rogner l'images de doppler le plus petit possible
+        imageView.setX(imageViewDoppler.getX()+450);                                                                                                                  //faire dememe pour les autres aussi
+        imageView.setY(screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageView.getFitHeight())));
+
+        int doppDepart = (int) (screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())))-100;  //rendu ici !!!!!
+        int doppFin = doppDepart+100;
 
         vitesseR.valueProperty().addListener(((observable, oldValue, newValue) -> {
 
@@ -225,10 +232,10 @@ public class Main extends Application{
 
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.setAutoReverse(true);
-            KeyValue kv2 = new KeyValue(imageViewDoppler.yProperty(),600, Interpolator.EASE_IN);
+            KeyValue kv2 = new KeyValue(imageViewDoppler.yProperty(),doppDepart, Interpolator.EASE_IN);
             KeyFrame kf2 = new KeyFrame(Duration.seconds(0), kv2);
 
-            KeyValue kv1 = new KeyValue(imageViewDoppler.yProperty(),700, Interpolator.EASE_IN);
+            KeyValue kv1 = new KeyValue(imageViewDoppler.yProperty(),doppFin, Interpolator.EASE_IN);
             try{
                 KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv1);
                 timeline.getKeyFrames().addAll(kf1, kf2);

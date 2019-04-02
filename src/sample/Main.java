@@ -14,8 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
+import javafx.scene.paint.*;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -214,6 +215,34 @@ public class Main extends Application{
         ImageView imageView = new ImageView();
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(300);
+        ImageView imageView1 = new ImageView();
+        imageView1.setPreserveRatio(true);
+        imageView1.setFitHeight(300);
+
+
+        //Charte de Décibels
+        Rectangle tige = new Rectangle(250, 50);
+        Polygon pointe = new Polygon(1450,850, 1450,950, 1550,900);
+        Line line = new Line(1200, 875, 1200, 925);
+        line.setStrokeWidth(5);
+        tige.setX(1200);
+        tige.setY(875);
+
+        Stop[] stops = new Stop[]{
+                new Stop(0, Color.GREEN),
+                new Stop(0.5, Color.YELLOW),
+                new Stop(1, Color.RED),
+        };
+
+        LinearGradient gradient = new LinearGradient(
+                0,0,
+                1,1,
+                true,
+                CycleMethod.NO_CYCLE,
+                stops);
+
+        tige.setFill(gradient);
+        pointe.setFill(Color.RED);
 
         //TIMELINE
         Rectangle rectangle = new Rectangle();
@@ -351,7 +380,7 @@ public class Main extends Application{
         });
 
 
-        Pane group = new Pane(horizon, imageViewDoppler, imageView);
+        Pane group = new Pane(horizon, imageViewDoppler, imageView, pointe, tige, line, imageView1);
         VBox vBox1 = new VBox(group);
         root3.setCenter(vBox1);
 
@@ -399,7 +428,7 @@ public class Main extends Application{
             doppler.setStructure(bouchons);
             imageViewDoppler.setImage(image7);
 
-
+            doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
 
         });
@@ -409,6 +438,7 @@ public class Main extends Application{
             doppler.setStructure(cacheOreilles);
             imageViewDoppler.setImage(image6);
 
+            doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
         });
 
@@ -416,7 +446,7 @@ public class Main extends Application{
             Mur mur = new Mur();
             doppler.setStructure(mur);
 
-
+            doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
         });
 
@@ -425,6 +455,7 @@ public class Main extends Application{
             doppler.setStructure(oreiller);
             imageViewDoppler.setImage(image8);
 
+            doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
         });
 
@@ -432,6 +463,7 @@ public class Main extends Application{
             Ambulance ambulance = new Ambulance();
             doppler.setSource(ambulance);
             imageView.setImage(image1);
+            imageView1.setImage(null);
             ambulance.setImage(image1);
             intensiteValue.setText(String.valueOf(ambulance.getIntensiteEmise()));
 
@@ -442,14 +474,13 @@ public class Main extends Application{
 
             entier = 50;
 
+            doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
-
 
            /* String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
             mediaPlayer.play();*/
-
 
         });
 
@@ -458,6 +489,7 @@ public class Main extends Application{
             Avion avion = new Avion();
             doppler.setSource(avion);
             imageView.setImage(image3);
+            imageView1.setImage(null);
             avion.setImage(image3);
             intensiteValue.setText(String.valueOf(avion.getIntensiteEmise()));
 
@@ -468,6 +500,7 @@ public class Main extends Application{
 
             entier = 400;
 
+            doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
           /*  String musicFile = "";
@@ -481,22 +514,25 @@ public class Main extends Application{
         source4.setOnAction(event -> {
             FeuxArtifice feuxArtifice = new FeuxArtifice();
             doppler.setSource(feuxArtifice);
-            imageView.setImage(image2);
+            imageView.setImage(null);
             intensiteValue.setText(String.valueOf(feuxArtifice.getIntensiteEmise()));
-            imageView.setY(100);
-            imageView.setX(1000);
+            imageView1.setImage(image2);
+
+            imageView1.setY(100);
+            imageView1.setX(1000);
 
             vitesseE.setMin(0);
             vitesseE.setMax(0);
             vitesseE.setMajorTickUnit(1);
             vitesseE.setMinorTickCount(0);
 
-            FadeTransition fade = new FadeTransition(Duration.seconds(1.5), imageView);
+            FadeTransition fade = new FadeTransition(Duration.seconds(1.5), imageView1);
             fade.setFromValue(1.0);
             fade.setToValue(0);
             fade.setCycleCount(Timeline.INDEFINITE);
             fade.play();
 
+            doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
            /* String musicFile = "";
@@ -511,6 +547,7 @@ public class Main extends Application{
             Marteau marteau = new Marteau();
             doppler.setSource(marteau);
             imageView.setImage(image4);
+            imageView1.setImage(null);
             marteau.setImage(image4);
             intensiteValue.setText(String.valueOf(marteau.getIntensiteEmise()));
 
@@ -521,6 +558,7 @@ public class Main extends Application{
 
             entier = 5;
 
+            doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
            /* String musicFile = "";
@@ -535,6 +573,7 @@ public class Main extends Application{
             Tondeuse tondeuse = new Tondeuse();
             doppler.setSource(tondeuse);
             imageView.setImage(image5);
+            imageView1.setImage(null);
             tondeuse.setImage(image5);
             intensiteValue.setText(String.valueOf(tondeuse.getIntensiteEmise()));
 
@@ -545,6 +584,7 @@ public class Main extends Application{
 
             entier = 5;
 
+            doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
          /*   String musicFile = "";

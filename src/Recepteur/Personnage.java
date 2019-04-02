@@ -5,8 +5,6 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.text.DecimalFormat;
-
 public class Personnage extends Application {
 
     //methode return
@@ -19,7 +17,8 @@ public class Personnage extends Application {
     private String nom;
     private double vitesse;
     private Image image;
-    private Structure protectActiv;
+    //probablement supprimer
+    private Structure structure;
     private Source source;
 
     public Source getSource() {
@@ -54,43 +53,32 @@ public class Personnage extends Application {
         this.image = image;
     }
 
-    public Structure getProtectActiv() {
-        return protectActiv;
+    public Structure getStructure() {
+        return structure;
     }
 
-    public void setProtectActiv(Structure protectActiv) {
-        this.protectActiv = protectActiv;
+    public void setStructure(Structure structure) {
+        this.structure = structure;
     }
 
-    public void Marcher(){
-
-    }
-    //c quoi so
-    public Structure Protection(Structure protection){
-
-        return protection;
-    }
-
-    //intensité
-    //on laisse tout en décibels
-    //besoin d'une méthode pour calculer décibels selon fréquence des structures
-    public double Entendre(Double intensieEmise, Double coAlpha){
-
-        double intensite = 0;
-
-        intensite = intensieEmise - coAlpha;
-
-        return intensite;
-    }
 
     //fréquence perçue
     //ajouter le vent
-    public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise){
+    public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise, double vent){
 
         double rep = 0;
         double vE = 0;
         double vR = 0;
-        double vitesseSon = 1235;
+        double vitesseSon = 0;
+
+        if (vent < 0){
+
+            vitesseSon = 1235 - Math.abs(vent);
+        }
+        else if (vent > 0){
+
+            vitesseSon = 1235 + vent;
+        }
 
         if (vitesseEmet > 0 && vitesseRecep > 0){
 
@@ -115,9 +103,7 @@ public class Personnage extends Application {
 
             rep = ((vitesseSon - vR) / (vitesseSon + vitesseEmet))*frequenceEmise;
         }
-/*
-        DecimalFormat df = new DecimalFormat("####.##");
-        df.format(rep);*/
+
 
         return rep;
     }

@@ -7,7 +7,6 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -16,7 +15,6 @@ import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
@@ -24,7 +22,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.text.DecimalFormat;
 
 public class Main extends Application{
 
@@ -36,6 +33,7 @@ public class Main extends Application{
     SequentialTransition seqTrans = new SequentialTransition();
     SequentialTransition seqFade = new SequentialTransition();
     public static double frequenceRep;
+    public static int entier;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -44,6 +42,7 @@ public class Main extends Application{
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
+
         scene.getStylesheets().add("sample/reception.css");
 
         primaryStage.setTitle("Doppler Project");
@@ -116,7 +115,6 @@ public class Main extends Application{
         MenuItem reinitialiser = new MenuItem("Réinitialiser la partie");
         MenuItem source1 = new MenuItem("Ambulance");
         MenuItem source2 = new MenuItem("Avion");
-        MenuItem source3 = new MenuItem("Chauteuse d'opéra");
         MenuItem source4 = new MenuItem("Feux d'artifice");
         MenuItem source5 = new MenuItem("Marteau piqueur");
         MenuItem source6 = new MenuItem("Tondeuse");
@@ -126,7 +124,7 @@ public class Main extends Application{
         MenuItem structure4 = new MenuItem("Oreiller");
 
         structure.getItems().addAll(structure1, structure2, structure3, structure4);
-        source.getItems().addAll(source1, source2, source3, source4, source5, source6);
+        source.getItems().addAll(source1, source2, source4, source5, source6);
         option.getItems().addAll(quitter, reinitialiser);
         menuBar.getMenus().addAll(source, structure, option);
 
@@ -143,9 +141,11 @@ public class Main extends Application{
         //vitesse sliders
         Label label = new Label("Vitesse éméteur");
         Label label2 = new Label("Vitesse récepteur");
+        Label label4 = new Label("Vitesse vent");
         Slider vitesseE = new Slider(0,0,0);
         Slider vitesseR = new Slider(-20,20,0);
-        VBox sliders = new VBox(label, vitesseE, label2, vitesseR);
+        Slider vent = new Slider(-80, 80, 0);
+        VBox sliders = new VBox(label, vitesseE, label2, vitesseR, label4, vent);
         sliders.setAlignment(Pos.CENTER);
         root3.setLeft(sliders);
         vitesseE.setShowTickMarks(true);
@@ -154,14 +154,18 @@ public class Main extends Application{
         vitesseR.setShowTickLabels(true);
         vitesseR.setMajorTickUnit(5);
         vitesseR.setMinorTickCount(0);
-
-       /* Rectangle result = new Rectangle(150, 75);
-        result.setStroke(Color.BLACK);
-        result.setStrokeWidth(2);
-        result.setFill(Color.CHOCOLATE);*/
+        vent.setShowTickMarks(true);
+        vent.setMajorTickUnit(20);
+        vent.setMinorTickCount(0);
+        vent.setShowTickLabels(true);
 
         //Améliorer l'apparence
         Label label3 = new Label("Résultats");
+
+        Label intesitePercue = new Label("Intensité perçue : ");
+        Label intensiteValue = new Label("0");
+        Label intensiteUnit = new Label(" dB");
+        HBox intensite = new HBox(intesitePercue, intensiteValue, intensiteUnit);
 
         Label frequence = new Label("Fréquence perçue : ");
         Label frequenceValue = new Label("0");
@@ -183,23 +187,29 @@ public class Main extends Application{
         Label vitesseRecepteurUnit = new Label(" km/h");
         HBox hBoxRecepteur = new HBox(vitesseRecepteur, vitesseRecepteurValue, vitesseRecepteurUnit);
 
-        VBox vBoxResultats = new VBox(hBoxFreq, hBoxEmise, hBoxEmetteur, hBoxRecepteur);
+        Label vitesseVent = new Label("Vitesse vent : ");
+        Label vitesseVentValue = new Label("0");
+        Label vitesseVentUnit = new Label(" km/h");
+        HBox ventH = new HBox(vitesseVent, vitesseVentValue, vitesseVentUnit);
+
+        VBox vBoxResultats = new VBox(intensite, hBoxFreq, hBoxEmise, hBoxEmetteur, hBoxRecepteur, ventH);
 
         VBox resultat = new VBox(label3, vBoxResultats);
         resultat.setAlignment(Pos.CENTER);
         root3.setRight(resultat);
         root3.setPadding(new Insets(0,10,0,10));
 
-        /*marche pas changer pour les background
-        Image image2 = new Image("sample/téléchargement.png");
-        ImageView flag = new ImageView(image2);
-        root3.setCenter(flag);                                              À SUPPRIMER */
-
         //IMAGES
         Image image1 = new Image("Emetteur/ambulance.png");
         Image image3 = new Image("Emetteur/avion.png");
         Image image4 = new Image("Emetteur/marteau-piqueur.png");
         Image image5 = new Image("Emetteur/tondeuse.png");
+        Image image2 = new Image("Emetteur/feux_artifices.png");
+        Image image6 = new Image("Recepteur/dopp_auditif.png");
+        Image image7 = new Image("Recepteur/dopp_bouchons.png");
+        Image image8 = new Image("Recepteur/dopp_oreiller.png");
+        Image ventD = new Image("sample/ventDroite.png");
+        Image ventG = new Image("sample/ventGauche.png");
         ImageView imageView = new ImageView();
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(300);
@@ -223,8 +233,6 @@ public class Main extends Application{
 
         vitesseR.valueProperty().addListener(((observable, oldValue, newValue) -> {
 
-            //ajouter une condition de faire une réflexion de l'image si valeur négative de la vitesse
-
             vitesseRecepteurValue.setText(String.valueOf(Math.round(vitesseR.getValue())));
 
             timeline.stop();
@@ -237,11 +245,11 @@ public class Main extends Application{
 
             KeyValue kv1 = new KeyValue(imageViewDoppler.yProperty(),doppFin, Interpolator.EASE_IN);
             try{
-                KeyFrame kf1 = new KeyFrame(Duration.seconds(1/ Math.abs( newValue.doubleValue())), kv1);
+                KeyFrame kf1 = new KeyFrame(Duration.seconds(5/ Math.abs( newValue.doubleValue())), kv1);
                 timeline.getKeyFrames().addAll(kf1, kf2);
                 timeline.play();
 
-                frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise());
+                frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise(), vent.getValue());
                 frequenceValue.setText((String.valueOf(Math.round(frequenceRep))));
             }
             catch (ArithmeticException e){
@@ -255,7 +263,20 @@ public class Main extends Application{
 
         vitesseE.valueProperty().addListener(((observable, oldValue, newValue) -> {
 
-            //la source avance encore
+            int transValue;
+            int retransValue;
+
+            if (vitesseE.getValue() < 0){
+                imageView.setScaleX(-1);
+                transValue = 200;
+                retransValue = -200;
+
+            }
+            else {
+                transValue = -200;
+                retransValue = 200;
+                imageView.setScaleX(1);
+            }
 
             vitesseEmetteurValue.setText(String.valueOf(Math.round(vitesseE.getValue())));
             seqFade.stop();
@@ -263,11 +284,11 @@ public class Main extends Application{
             imageView.setTranslateX(0);
 
             TranslateTransition trans  = new TranslateTransition(
-                    Duration.seconds(20/ Math.abs( newValue.doubleValue())), imageView);
-            trans.setByX(-200);
+                    Duration.seconds(entier/ Math.abs( newValue.doubleValue())), imageView);
+            trans.setByX(transValue);
 
             TranslateTransition resetTrans = new TranslateTransition(Duration.millis(1), imageView);
-            resetTrans.setByX(200);
+            resetTrans.setByX(retransValue);
 
             seqTrans = new SequentialTransition(trans, resetTrans);
             seqTrans.setCycleCount(Timeline.INDEFINITE);
@@ -275,7 +296,7 @@ public class Main extends Application{
 
 
             FadeTransition fade = new FadeTransition(
-                    Duration.seconds(20/ Math.abs( newValue.doubleValue())), imageView);
+                    Duration.seconds(entier/ Math.abs( newValue.doubleValue())), imageView);
             fade.setFromValue(1.0);
             fade.setToValue(0);
 
@@ -290,13 +311,43 @@ public class Main extends Application{
 
             try{
 
-                frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise());
+                frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise(), vent.getValue());
                 frequenceValue.setText(String.valueOf(Math.round(frequenceRep)));
             }
             catch (ArithmeticException e){
                 System.out.println("division par 0");
             }
         }));
+
+        vent.valueProperty().addListener((observable, oldValue, newValue) -> {
+
+            if (vent.getValue() < 0){
+
+                fond.setImage(ventG);
+                Background background2 = new Background(new BackgroundImage(ventG,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.CENTER,
+                        bSize));
+
+                root3.setBackground(background2);
+            }
+            else if (vent.getValue() > 0){
+
+                fond.setImage(ventD);
+                Background background3 = new Background(new BackgroundImage(ventD,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.CENTER,
+                        bSize));
+
+                root3.setBackground(background3);
+            }
+
+            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise(), vent.getValue());
+            frequenceValue.setText(String.valueOf(Math.round(frequenceRep)));
+            vitesseVentValue.setText(String.valueOf(Math.round(vent.getValue())));
+        });
 
 
         Pane group = new Pane(horizon, imageViewDoppler, imageView);
@@ -322,41 +373,73 @@ public class Main extends Application{
         });
 
         reinitialiser.setOnAction(event -> {
+           frequenceValue.setText("0");
+           frequenceEmiseValue.setText("0");
+           vitesseEmetteurValue.setText("0");
+           vitesseRecepteurValue.setText("0");
+           intensiteValue.setText("0");
+           vitesseVentValue.setText("0");
+
+           vitesseE.setValue(0);
+           vitesseR.setValue(0);
+           vitesseE.setMin(0);
+           vitesseE.setMax(0);
+           vent.setValue(0);
+
+           root3.setBackground(background);
+
+           imageView.setImage(null);
+           imageViewDoppler.setImage(dopplerImage);
 
         });
 
         structure1.setOnAction(event -> {
             Bouchons bouchons = new Bouchons();
-            doppler.setProtectActiv(bouchons);
+            doppler.setStructure(bouchons);
+            imageViewDoppler.setImage(image7);
+
+
+           intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
 
         });
 
         structure2.setOnAction(event -> {
             CacheOreilles cacheOreilles = new CacheOreilles();
-            doppler.setProtectActiv(cacheOreilles);
+            doppler.setStructure(cacheOreilles);
+            imageViewDoppler.setImage(image6);
+
+            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
         });
 
         structure3.setOnAction(event -> {
             Mur mur = new Mur();
-            doppler.setProtectActiv(mur);
+            doppler.setStructure(mur);
+
+
+            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
         });
 
         structure4.setOnAction(event -> {
             Oreiller oreiller = new Oreiller();
-            doppler.setProtectActiv(oreiller);
+            doppler.setStructure(oreiller);
+            imageViewDoppler.setImage(image8);
+
+            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
         });
 
         source1.setOnAction(event -> {
-                //ajuster la vitesse du slider
             Ambulance ambulance = new Ambulance();
             doppler.setSource(ambulance);
             imageView.setImage(image1);
             ambulance.setImage(image1);
+            intensiteValue.setText(String.valueOf(ambulance.getIntensiteEmise()));
 
-            vitesseE.setMin(-200);
-            vitesseE.setMax(200);
+            vitesseE.setMin(-150);
+            vitesseE.setMax(150);
             vitesseE.setMajorTickUnit(50);
             vitesseE.setMinorTickCount(0);
+
+            entier = 50;
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
@@ -375,46 +458,52 @@ public class Main extends Application{
             doppler.setSource(avion);
             imageView.setImage(image3);
             avion.setImage(image3);
+            intensiteValue.setText(String.valueOf(avion.getIntensiteEmise()));
 
             vitesseE.setMin(-1000);
             vitesseE.setMax(1000);
-            vitesseE.setMajorTickUnit(200);
+            vitesseE.setMajorTickUnit(500);
             vitesseE.setMinorTickCount(0);
+
+            entier = 400;
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-            String musicFile = "";
+          /*  String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();
+            mediaPlayer.play();*/
 
-            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), avion.getFrequenceEmise());
-        });
-
-        source3.setOnAction(event -> {
-            String musicFile = "";
-            Media audio = new Media(new File(musicFile).toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();
+            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), avion.getFrequenceEmise(), vent.getValue());
         });
 
         source4.setOnAction(event -> {
             FeuxArtifice feuxArtifice = new FeuxArtifice();
             doppler.setSource(feuxArtifice);
+            imageView.setImage(image2);
+            intensiteValue.setText(String.valueOf(feuxArtifice.getIntensiteEmise()));
+            imageView.setY(100);
+            imageView.setX(1000);
 
             vitesseE.setMin(0);
             vitesseE.setMax(0);
-            vitesseE.setMajorTickUnit(0);
+            vitesseE.setMajorTickUnit(1);
             vitesseE.setMinorTickCount(0);
+
+            FadeTransition fade = new FadeTransition(Duration.seconds(1.5), imageView);
+            fade.setFromValue(1.0);
+            fade.setToValue(0);
+            fade.setCycleCount(Timeline.INDEFINITE);
+            fade.play();
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-            String musicFile = "";
+           /* String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();
+            mediaPlayer.play();*/
 
-           frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), feuxArtifice.getFrequenceEmise());
+           frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), feuxArtifice.getFrequenceEmise(), vent.getValue());
         });
 
         source5.setOnAction(event -> {
@@ -422,11 +511,14 @@ public class Main extends Application{
             doppler.setSource(marteau);
             imageView.setImage(image4);
             marteau.setImage(image4);
+            intensiteValue.setText(String.valueOf(marteau.getIntensiteEmise()));
 
             vitesseE.setMin(-5);
             vitesseE.setMax(5);
             vitesseE.setMajorTickUnit(1);
             vitesseE.setMinorTickCount(0);
+
+            entier = 5;
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
@@ -435,7 +527,7 @@ public class Main extends Application{
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
             mediaPlayer.play();
 
-            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), marteau.getFrequenceEmise());
+            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), marteau.getFrequenceEmise(), vent.getValue());
         });
 
         source6.setOnAction(event -> {
@@ -443,11 +535,14 @@ public class Main extends Application{
             doppler.setSource(tondeuse);
             imageView.setImage(image5);
             tondeuse.setImage(image5);
+            intensiteValue.setText(String.valueOf(tondeuse.getIntensiteEmise()));
 
             vitesseE.setMin(-5);
             vitesseE.setMax(5);
             vitesseE.setMajorTickUnit(1);
             vitesseE.setMinorTickCount(0);
+
+            entier = 5;
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
@@ -456,7 +551,7 @@ public class Main extends Application{
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
             mediaPlayer.play();
 
-            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), tondeuse.getFrequenceEmise());
+            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), tondeuse.getFrequenceEmise(), vent.getValue());
         });
 
         primaryStage.show();

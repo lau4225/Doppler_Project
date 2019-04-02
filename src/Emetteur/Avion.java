@@ -1,5 +1,8 @@
 package Emetteur;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class Avion extends Source {
 
     public Avion(){
@@ -9,4 +12,5 @@ public class Avion extends Source {
         setFrequenceEmise(2500);
         setIntensiteEmise(200);
     }
+
 }

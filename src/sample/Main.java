@@ -163,10 +163,10 @@ public class Main extends Application{
         //Améliorer l'apparence
         Label label3 = new Label("Résultats");
 
-        Label intesitePercue = new Label("Intensité perçue : ");
+        Label intensitePercue = new Label("Intensité perçue : ");
         Label intensiteValue = new Label("0");
         Label intensiteUnit = new Label(" dB");
-        HBox intensite = new HBox(intesitePercue, intensiteValue, intensiteUnit);
+        HBox intensite = new HBox(intensitePercue, intensiteValue, intensiteUnit);
 
         Label frequence = new Label("Fréquence perçue : ");
         Label frequenceValue = new Label("0");
@@ -193,7 +193,15 @@ public class Main extends Application{
         Label vitesseVentUnit = new Label(" km/h");
         HBox ventH = new HBox(vitesseVent, vitesseVentValue, vitesseVentUnit);
 
-        VBox vBoxResultats = new VBox(intensite, hBoxFreq, hBoxEmise, hBoxEmetteur, hBoxRecepteur, ventH);
+        Label intensiteAjusteTitre = new Label("Intensité ajustée perçue : ");                          //noms de variables à changer
+        Label intensiteAjuste = new Label("0");
+        HBox intensite2 = new HBox(intensiteAjusteTitre, intensiteAjuste, intensiteUnit);           //voir si on prends juste 1 hB pour freq et Intensite
+
+        Label frequenceAjusteTitre = new Label("Fréquence ajustée perçue : ");
+        Label frequenceAjuste = new Label("0");
+        HBox hBoxFreq2 = new HBox(frequenceAjusteTitre, frequenceAjuste, frequenceUnit);
+
+        VBox vBoxResultats = new VBox(intensite, hBoxFreq, hBoxEmise, hBoxEmetteur, hBoxRecepteur, ventH, intensite2, hBoxFreq2);
 
         VBox resultat = new VBox(label3, vBoxResultats);
         resultat.setAlignment(Pos.CENTER);
@@ -345,7 +353,13 @@ public class Main extends Application{
                 root3.setBackground(background3);
             }
 
-            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise(), vent.getValue());
+            try {
+                frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise(), vent.getValue());
+            }catch(NullPointerException e){
+
+                System.out.println("nullpointer exception");
+            }
+
             frequenceValue.setText(String.valueOf(Math.round(frequenceRep)));
             vitesseVentValue.setText(String.valueOf(Math.round(vent.getValue())));
         });

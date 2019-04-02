@@ -102,10 +102,6 @@ public class Personnage extends Application {
             rep = ((vitesseSon - vR) / (vitesseSon + vitesseEmet))*frequenceEmise;
         }
 
-
         return rep;
     }
-
-
-
 }

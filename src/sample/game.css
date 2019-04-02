@@ -19,15 +19,13 @@
     -fx-font-style: normal;
     -fx-font: 20 "Calibri" ;
     -fx-text-fill: black;
-
-
 }
 
 
 .menu-bar{
     -fx-font-style: normal;
     -fx-font: 14 "Calibri" ;
-    -fx-background-color: darkturquoise;
+    -fx-background-color: darkcyan;
     -fx-text-fill: darkslategrey;
     -fx-prompt-text-fill: wheat;
 
@@ -36,8 +34,8 @@
 .menu{
     -fx-font-style: normal;
     -fx-font: 14 "Calibri" ;
-    -fx-background-color: darkturquoise;
-    -fx-border-color: darkturquoise;
+    -fx-background-color: darkcyan;
+    -fx-border-color: darkcyan;
     -fx-text-fill: darkslategrey;
     -fx-prompt-text-fill: wheat;
 }
@@ -45,16 +43,12 @@
 .menu-item{
     -fx-font-style: normal;
     -fx-font: 14 "Calibri" ;
-    -fx-background-color: darkturquoise;
-    -fx-border-color: darkturquoise;
+    -fx-background-color: darkcyan;
+    -fx-border-color: darkcyan;
     -fx-text-fill: darkslategrey;
     -fx-prompt-text-fill: wheat;
 }
 
-.slider {
-    -fx-text-fill: deepskyblue;
-    -fx-font-style: normal;
-    -fx-font: 20 "Calibri" ;
+.slider{
 }
-
 

@@ -204,19 +204,15 @@ public class Main extends Application{
         Image image3 = new Image("Emetteur/avion.png");
         Image image4 = new Image("Emetteur/marteau-piqueur.png");
         Image image5 = new Image("Emetteur/tondeuse.png");
-        Image image6 = new Image("Recepteur/bouchons.png");
-        Image image7 = new Image("Recepteur/protecteurs auditifs.png");
-        Image image8 = new Image("Recepteur/oreiller.png");
+        Image image2 = new Image("Emetteur/feux_artifices.png");
+        Image image6 = new Image("Recepteur/dopp_auditif.png");
+        Image image7 = new Image("Recepteur/dopp_bouchons.png");
+        Image image8 = new Image("Recepteur/dopp_oreiller.png");
         Image ventD = new Image("sample/ventDroite.png");
         Image ventG = new Image("sample/ventGauche.png");
         ImageView imageView = new ImageView();
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(300);
-        ImageView imageView2 = new ImageView();
-        imageView2.setPreserveRatio(true);
-        //revoir
-        imageView2.setFitHeight(30);
-
 
         //TIMELINE
         Rectangle rectangle = new Rectangle();
@@ -228,9 +224,6 @@ public class Main extends Application{
         imageViewDoppler.setY(650);
         imageView.setX(900);
         imageView.setY(600);
-        //revoir
-        /*imageView2.setX(400);
-        imageView2.setY(650);*/
 
         vitesseR.valueProperty().addListener(((observable, oldValue, newValue) -> {
 
@@ -351,7 +344,7 @@ public class Main extends Application{
         });
 
 
-        Pane group = new Pane(horizon, imageViewDoppler, imageView, imageView2);
+        Pane group = new Pane(horizon, imageViewDoppler, imageView);
         VBox vBox1 = new VBox(group);
         root3.setCenter(vBox1);
 
@@ -390,14 +383,15 @@ public class Main extends Application{
            root3.setBackground(background);
 
            imageView.setImage(null);
+           imageViewDoppler.setImage(dopplerImage);
 
         });
 
         structure1.setOnAction(event -> {
-            //on va changer l'image view de doppler
             Bouchons bouchons = new Bouchons();
             doppler.setStructure(bouchons);
-            imageView2.setImage(image6);
+            imageViewDoppler.setImage(image7);
+
 
            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
 
@@ -406,7 +400,7 @@ public class Main extends Application{
         structure2.setOnAction(event -> {
             CacheOreilles cacheOreilles = new CacheOreilles();
             doppler.setStructure(cacheOreilles);
-            imageView2.setImage(image7);
+            imageViewDoppler.setImage(image6);
 
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
         });
@@ -422,7 +416,7 @@ public class Main extends Application{
         structure4.setOnAction(event -> {
             Oreiller oreiller = new Oreiller();
             doppler.setStructure(oreiller);
-            imageView2.setImage(image8);
+            imageViewDoppler.setImage(image8);
 
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
         });
@@ -480,19 +474,28 @@ public class Main extends Application{
         source4.setOnAction(event -> {
             FeuxArtifice feuxArtifice = new FeuxArtifice();
             doppler.setSource(feuxArtifice);
+            imageView.setImage(image2);
             intensiteValue.setText(String.valueOf(feuxArtifice.getIntensiteEmise()));
+            imageView.setY(100);
+            imageView.setX(1000);
 
             vitesseE.setMin(0);
             vitesseE.setMax(0);
-            vitesseE.setMajorTickUnit(0);
+            vitesseE.setMajorTickUnit(1);
             vitesseE.setMinorTickCount(0);
+
+            FadeTransition fade = new FadeTransition(Duration.seconds(1.5), imageView);
+            fade.setFromValue(1.0);
+            fade.setToValue(0);
+            fade.setCycleCount(Timeline.INDEFINITE);
+            fade.play();
 
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-            String musicFile = "";
+           /* String musicFile = "";
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();
+            mediaPlayer.play();*/
 
            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), feuxArtifice.getFrequenceEmise(), vent.getValue());
         });

@@ -3,6 +3,7 @@ package Recepteur;
 import Emetteur.Source;
 import javafx.application.Application;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 public class Personnage extends Application {
@@ -61,6 +62,29 @@ public class Personnage extends Application {
         this.structure = structure;
     }
 
+    //revoir valeur
+    public void Decibels(Line line, double intensite){
+
+        if (intensite <= 80){
+
+            line.setStartX(1225);
+            line.setEndX(1225);
+
+        }
+        else if (intensite > 80 && intensite < 120){
+
+            line.setStartX(1325);
+            line.setEndX(1325);
+
+        }
+        else if (intensite >=120){
+
+            line.setStartX(1450);
+            line.setEndX(1450);
+
+        }
+    }
+
     //revérifier calcul = 0
     public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise, double vent){
 
@@ -101,7 +125,6 @@ public class Personnage extends Application {
 
             rep = ((vitesseSon - vR) / (vitesseSon + vitesseEmet))*frequenceEmise;
         }
-
 
         return rep;
     }

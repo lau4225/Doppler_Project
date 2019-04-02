@@ -81,8 +81,4 @@ public class Source extends Application {
 
     }
 
-    public void effetSonores(){
-
-    }
-
 }

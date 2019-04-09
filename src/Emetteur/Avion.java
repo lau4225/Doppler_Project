@@ -7,7 +7,6 @@ public class Avion extends Source {
 
     public Avion(){
 
-        //fréqunece à vérifier
         setNom("Avion");
         setFrequenceEmise(500);
         setIntensiteEmise(120);

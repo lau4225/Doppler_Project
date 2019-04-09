@@ -18,7 +18,6 @@ public class Personnage extends Application {
     private String nom;
     private double vitesse;
     private Image image;
-    //probablement supprimer
     private Structure structure;
     private Source source;
 
@@ -65,19 +64,20 @@ public class Personnage extends Application {
     //revoir valeur
     public void Decibels(Line line, double intensite){
 
-        if (intensite <= 80){
+        //valeur de la position conversion
+        if (intensite <= 84){
 
             line.setStartX(1225);
             line.setEndX(1225);
 
         }
-        else if (intensite > 80 && intensite < 120){
+        else if (intensite > 84 && intensite < 110){
 
             line.setStartX(1325);
             line.setEndX(1325);
 
         }
-        else if (intensite >=120){
+        else if (intensite >=110){
 
             line.setStartX(1450);
             line.setEndX(1450);
@@ -85,7 +85,6 @@ public class Personnage extends Application {
         }
     }
 
-    //revérifier calcul = 0
     public double frequenceCalc(double vitesseEmet, double vitesseRecep, double frequenceEmise, double vent){
 
         double rep = 0;
@@ -104,7 +103,7 @@ public class Personnage extends Application {
 
         if (vitesseEmet >= 0 && vitesseRecep >= 0){
 
-            rep = (vitesseSon + vitesseRecep) / (vitesseSon + vitesseEmet)*frequenceEmise;
+            rep = ((vitesseSon + vitesseRecep) / (vitesseSon + vitesseEmet))*frequenceEmise;
         }
         if (vitesseEmet < 0 && vitesseRecep < 0){
 
@@ -124,6 +123,11 @@ public class Personnage extends Application {
             vR = Math.abs(vitesseRecep);
 
             rep = ((vitesseSon - vR) / (vitesseSon + vitesseEmet))*frequenceEmise;
+        }
+
+        if (vitesseEmet == 0 && vitesseRecep == 0){
+
+            rep = frequenceEmise;
         }
 
         return rep;

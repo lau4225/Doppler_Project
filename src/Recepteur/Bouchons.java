@@ -10,7 +10,6 @@ public class Bouchons extends Structure {
     }
 
     public double Isolation(Source source){
-        //manque feux d'articice
 
         double rep = 0;
 
@@ -19,11 +18,19 @@ public class Bouchons extends Structure {
 
                 rep = source.getIntensiteEmise() - 24.4;
             }
-            else if (source.getFrequenceEmise() == 1000){
+            else if (source.getFrequenceEmise() > 125 && source.getFrequenceEmise() <= 250){
+
+                rep = source.getIntensiteEmise() - 23.6;
+            }
+            else if (source.getFrequenceEmise() > 250 && source.getFrequenceEmise() <= 500){
+
+                rep = source.getIntensiteEmise() - 25.6;
+            }
+            else if(source.getFrequenceEmise() > 250 && source.getFrequenceEmise() == 1000){
 
                 rep = source.getIntensiteEmise() - 26.5;
             }
-            else if (source.getFrequenceEmise() > 2000){
+            else if (source.getFrequenceEmise() > 1000 && source.getFrequenceEmise() == 2000){
 
                 rep = source.getIntensiteEmise() - 32.3;
             }

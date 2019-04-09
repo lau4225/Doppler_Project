@@ -237,6 +237,7 @@ public class Main extends Application{
         Image image8 = new Image("Recepteur/dopp_oreiller.png");
         Image ventD = new Image("sample/ventDroite.png");
         Image ventG = new Image("sample/ventGauche.png");
+        Image image9 = new Image("sample/Recepteur/dopp_murs.png");
         ImageView imageView = new ImageView();
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(300);
@@ -476,7 +477,7 @@ public class Main extends Application{
         structure3.setOnAction(event -> {
             Mur mur = new Mur();
             doppler.setStructure(mur);
-            imageViewDoppler.setImage(dopplerImage);
+            imageViewDoppler.setImage(image9);
 
             doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));

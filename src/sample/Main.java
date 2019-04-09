@@ -7,8 +7,10 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -60,6 +62,13 @@ public class Main extends Application{
         VBox centre  = new VBox(demarrer, guideUti);
         centre.setAlignment(Pos.CENTER);
         root.setCenter(centre);
+
+        InnerShadow innerShadow = new InnerShadow();
+        innerShadow.setOffsetX(2.0f);
+        innerShadow.setOffsetY(2.0f);
+        titre.setScaleX(3); titre.setScaleY(3);
+        titre.setEffect(innerShadow);
+        titre.setTranslateY(50);
 
         VBox top = new VBox(titre);
         top.setAlignment(Pos.TOP_CENTER);
@@ -123,8 +132,10 @@ public class Main extends Application{
         MenuItem structure2 = new MenuItem("Cache Oreilles");
         MenuItem structure3 = new MenuItem("Mur");
         MenuItem structure4 = new MenuItem("Oreiller");
+        MenuItem structure5 = new MenuItem("Aucun");
 
-        structure.getItems().addAll(structure1, structure2, structure3, structure4);
+
+        structure.getItems().addAll(structure1, structure2, structure3, structure4, structure5);
         source.getItems().addAll(source1, source2, source4, source5, source6);
         option.getItems().addAll(quitter, reinitialiser);
         menuBar.getMenus().addAll(source, structure, option);
@@ -167,45 +178,51 @@ public class Main extends Application{
         Label intensiteValue = new Label("0");
         Label intensiteUnit = new Label(" dB");
         HBox intensite = new HBox(intensitePercue, intensiteValue, intensiteUnit);
+        intensite.setAlignment(Pos.CENTER);
 
         Label frequence = new Label("Fréquence perçue : ");
         Label frequenceValue = new Label("0");
         Label frequenceUnit = new Label(" Hz");
         HBox hBoxFreq = new HBox(frequence, frequenceValue, frequenceUnit);
+        hBoxFreq.setAlignment(Pos.CENTER);
 
         Label frequenceEmise = new Label("Fréquence émise : ");
         Label frequenceEmiseValue = new Label("0");
         Label frequenceEmiseUnit = new Label(" Hz");
         HBox hBoxEmise = new HBox(frequenceEmise, frequenceEmiseValue, frequenceEmiseUnit);
+        hBoxEmise.setAlignment(Pos.CENTER);
 
         Label vitesseEmetteur = new Label("Vitesse source : ");
         Label vitesseEmetteurValue = new Label(String.valueOf(vitesseE.getValue()));
         Label vitesseEmetteurUnit = new Label(" km/h");
         HBox hBoxEmetteur = new HBox(vitesseEmetteur, vitesseEmetteurValue, vitesseEmetteurUnit);
+        hBoxEmetteur.setAlignment(Pos.CENTER);
 
         Label vitesseRecepteur = new Label("Vitesse Doppler : ");
         Label vitesseRecepteurValue = new Label(String.valueOf(vitesseR.getValue()));
         Label vitesseRecepteurUnit = new Label(" km/h");
         HBox hBoxRecepteur = new HBox(vitesseRecepteur, vitesseRecepteurValue, vitesseRecepteurUnit);
+        hBoxRecepteur.setAlignment(Pos.CENTER);
 
         Label vitesseVent = new Label("Vitesse vent : ");
         Label vitesseVentValue = new Label("0");
         Label vitesseVentUnit = new Label(" km/h");
         HBox ventH = new HBox(vitesseVent, vitesseVentValue, vitesseVentUnit);
+        ventH.setAlignment(Pos.CENTER);
 
-        Label intensiteAjusteTitre = new Label("Intensité ajustée perçue : ");                          //noms de variables à changer
-        Label intensiteAjuste = new Label("0");
-        HBox intensite2 = new HBox(intensiteAjusteTitre, intensiteAjuste, intensiteUnit);           //voir si on prends juste 1 hB pour freq et Intensite
-
-        Label frequenceAjusteTitre = new Label("Fréquence ajustée perçue : ");
-        Label frequenceAjuste = new Label("0");
-        HBox hBoxFreq2 = new HBox(frequenceAjusteTitre, frequenceAjuste, frequenceUnit);
-
-        VBox vBoxResultats = new VBox(intensite, hBoxFreq, hBoxEmise, hBoxEmetteur, hBoxRecepteur, ventH, intensite2, hBoxFreq2);
+        VBox vBoxResultats = new VBox(intensite, hBoxFreq, hBoxEmise, hBoxEmetteur, hBoxRecepteur, ventH);
 
         VBox resultat = new VBox(label3, vBoxResultats);
         resultat.setAlignment(Pos.CENTER);
-        root3.setRight(resultat);
+        resultat.setTranslateX(25);
+        Rectangle rect =  new Rectangle(275,180);
+        rect.setFill(Color.DARKCYAN);
+                                                                        //rendu ici laurie ajouter dropshadow, lightning effect, inner shadow
+        Group groupResult = new Group(rect, resultat);
+        groupResult.setTranslateY((screenSize.getHeight()/2) - rect.getHeight());
+
+
+        root3.setRight(groupResult);
         root3.setPadding(new Insets(0,10,0,10));
 
         //IMAGES
@@ -429,6 +446,7 @@ public class Main extends Application{
         structure3.setOnAction(event -> {
             Mur mur = new Mur();
             doppler.setStructure(mur);
+            imageViewDoppler.setImage(dopplerImage);
 
 
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
@@ -440,6 +458,19 @@ public class Main extends Application{
             imageViewDoppler.setImage(image8);
 
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+        });
+
+        structure5.setOnAction(event -> {
+            doppler.setStructure(null);
+            imageViewDoppler.setImage(dopplerImage);
+
+
+            try{
+                intensiteValue.setText(String.valueOf(doppler.getSource().getIntensiteEmise()));
+            }catch (NullPointerException e){
+                System.out.println("null pointer strusture 5 aucun");
+            }
+
         });
 
         source1.setOnAction(event -> {

@@ -14,6 +14,8 @@ public class CacheOreilles extends Structure {
 
         double rep = source.getIntensiteEmise()-28;
 
+        if (rep<0){ rep = 0; }
+
         return rep;
 
     }

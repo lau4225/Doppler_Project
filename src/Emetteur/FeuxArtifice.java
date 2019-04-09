@@ -11,7 +11,7 @@ public class FeuxArtifice extends Source {
 
         //freéquence pas trouvée
         setNom("Feux artifice");
-        setFrequenceEmise(300);
+        setFrequenceEmise(360);
         setIntensiteEmise(140);
     }
 

@@ -128,7 +128,4 @@ public class Personnage extends Application {
 
         return rep;
     }
-
-
-
 }

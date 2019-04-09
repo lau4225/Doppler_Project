@@ -32,6 +32,9 @@ public class Bouchons extends Structure {
         catch (NullPointerException e){
 
         }
+
+        if (rep<0){ rep = 0; }
+
         return rep;
     }
 }

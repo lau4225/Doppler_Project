@@ -235,9 +235,10 @@ public class Main extends Application{
         Image image6 = new Image("Recepteur/dopp_auditif.png");
         Image image7 = new Image("Recepteur/dopp_bouchons.png");
         Image image8 = new Image("Recepteur/dopp_oreiller.png");
+        Image image9 = new Image("Recepteur/dopp_murs.png");
         Image ventD = new Image("sample/ventDroite.png");
         Image ventG = new Image("sample/ventGauche.png");
-        Image image9 = new Image("sample/Recepteur/dopp_murs.png");
+
         ImageView imageView = new ImageView();
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(300);
@@ -314,6 +315,12 @@ public class Main extends Application{
             catch (NullPointerException e){
 
             }
+            if (Math.round(vitesseR.getValue())==0){
+                imageViewDoppler.setX(350);
+                imageViewDoppler.setY(screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())));
+                timeline.stop();
+            }
+
         }));
 
 
@@ -447,6 +454,7 @@ public class Main extends Application{
            vitesseE.setMin(0);
            vitesseE.setMax(0);
            vent.setValue(0);
+           doppler.setStructure(null);
 
            root3.setBackground(background);
 
@@ -506,12 +514,14 @@ public class Main extends Application{
         });
 
         source1.setOnAction(event -> {
+            reinitialiser.fire();
             Ambulance ambulance = new Ambulance();
             doppler.setSource(ambulance);
             imageView.setImage(image1);
             imageView1.setImage(null);
             ambulance.setImage(image1);
             intensiteValue.setText(String.valueOf(ambulance.getIntensiteEmise()));
+            frequenceValue.setText(String.valueOf(ambulance.getFrequenceEmise()));
 
             vitesseE.setMin(-150);
             vitesseE.setMax(150);
@@ -527,17 +537,20 @@ public class Main extends Application{
             Media audio = new Media(new File(musicFile).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(audio);
             mediaPlayer.play();*/
+            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), ambulance.getFrequenceEmise(), vent.getValue());
 
         });
 
         source2.setOnAction(event -> {
             //pas son
+            reinitialiser.fire();
             Avion avion = new Avion();
             doppler.setSource(avion);
             imageView.setImage(image3);
             imageView1.setImage(null);
             avion.setImage(image3);
             intensiteValue.setText(String.valueOf(avion.getIntensiteEmise()));
+            frequenceValue.setText(String.valueOf(avion.getFrequenceEmise()));
 
             vitesseE.setMin(-1000);
             vitesseE.setMax(1000);
@@ -558,10 +571,12 @@ public class Main extends Application{
         });
 
         source4.setOnAction(event -> {
+            reinitialiser.fire();
             FeuxArtifice feuxArtifice = new FeuxArtifice();
             doppler.setSource(feuxArtifice);
             imageView.setImage(null);
             intensiteValue.setText(String.valueOf(feuxArtifice.getIntensiteEmise()));
+            frequenceValue.setText(String.valueOf(feuxArtifice.getFrequenceEmise()));
             imageView1.setImage(image2);
 
             imageView1.setY(100);
@@ -590,12 +605,14 @@ public class Main extends Application{
         });
 
         source5.setOnAction(event -> {
+            reinitialiser.fire();
             Marteau marteau = new Marteau();
             doppler.setSource(marteau);
             imageView.setImage(image4);
             imageView1.setImage(null);
             marteau.setImage(image4);
             intensiteValue.setText(String.valueOf(marteau.getIntensiteEmise()));
+            frequenceValue.setText(String.valueOf(marteau.getFrequenceEmise()));
 
             vitesseE.setMin(-5);
             vitesseE.setMax(5);
@@ -616,12 +633,14 @@ public class Main extends Application{
         });
 
         source6.setOnAction(event -> {
+            reinitialiser.fire();
             Tondeuse tondeuse = new Tondeuse();
             doppler.setSource(tondeuse);
             imageView.setImage(image5);
             imageView1.setImage(null);
             tondeuse.setImage(image5);
             intensiteValue.setText(String.valueOf(tondeuse.getIntensiteEmise()));
+            frequenceValue.setText(String.valueOf(tondeuse.getFrequenceEmise()));
 
             vitesseE.setMin(-5);
             vitesseE.setMax(5);

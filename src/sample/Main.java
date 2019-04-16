@@ -35,6 +35,8 @@ public class Main extends Application{
     private static Timeline timeline = new Timeline();
     SequentialTransition seqTrans = new SequentialTransition();
     SequentialTransition seqFade = new SequentialTransition();
+    SequentialTransition seqTrans2 = new SequentialTransition();
+    SequentialTransition seqFade2 = new SequentialTransition();
     public static double frequenceRep;
     public static int entier;
 
@@ -255,6 +257,9 @@ public class Main extends Application{
         tige.setX(1200);
         tige.setY(875);
 
+        double widthFleche = 1550 - 1200;
+        double heightFleche = 950 - 850;
+        double debutFleche = 1200;
         Stop[] stops = new Stop[]{
                 new Stop(0, Color.GREEN),
                 new Stop(0.5, Color.YELLOW),
@@ -270,6 +275,7 @@ public class Main extends Application{
 
         tige.setFill(gradient);
         pointe.setFill(Color.RED);
+        Group fleche = new Group(tige, pointe, line);
 
         //TIMELINE
         Rectangle rectangle = new Rectangle();
@@ -280,10 +286,20 @@ public class Main extends Application{
                 (screenSize.getHeight()-((screenSize.getHeight()/8))));
         horizon.setStroke(Color.CHOCOLATE);
         horizon.setStrokeWidth(screenSize.getHeight()/7);
-        imageViewDoppler.setX(350);
+        imageViewDoppler.setX(screenSize.getWidth()/12);
         imageViewDoppler.setY(screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())));   //rogner l'images de doppler le plus petit possible
         imageView.setX(imageViewDoppler.getX()+450);                                                                                                                  //faire dememe pour les autres aussi
         imageView.setY(screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageView.getFitHeight())));
+
+        if (screenSize.getHeight()<1080){
+            fleche.setScaleY(screenSize.getHeight()/1080);
+            fleche.setTranslateY((screenSize.getHeight()-950) - (heightFleche/2));
+        }
+        if (screenSize.getWidth()<1920) {
+            fleche.setScaleX(screenSize.getWidth()/1920);
+            fleche.setTranslateX((screenSize.getWidth()-1550) - (widthFleche/2) - 100);
+            debutFleche = tige.getX();
+        }
 
         int doppDepart = (int) (screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())))-100;  //rendu ici !!!!!
         int doppFin = doppDepart+100;
@@ -299,7 +315,6 @@ public class Main extends Application{
             timeline.setAutoReverse(true);
             KeyValue kv2 = new KeyValue(imageViewDoppler.yProperty(),doppDepart, Interpolator.EASE_IN);
             KeyFrame kf2 = new KeyFrame(Duration.seconds(0), kv2);
-
             KeyValue kv1 = new KeyValue(imageViewDoppler.yProperty(),doppFin, Interpolator.EASE_IN);
             try{
                 KeyFrame kf1 = new KeyFrame(Duration.seconds(5/ Math.abs( newValue.doubleValue())), kv1);
@@ -311,12 +326,13 @@ public class Main extends Application{
             }
             catch (ArithmeticException e){
                 System.out.println("division par 0");
+                frequenceValue.setText("0");
             }
             catch (NullPointerException e){
 
             }
             if (Math.round(vitesseR.getValue())==0){
-                imageViewDoppler.setX(350);
+                imageViewDoppler.setX(screenSize.getWidth()/12);
                 imageViewDoppler.setY(screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())));
                 timeline.stop();
             }
@@ -379,6 +395,7 @@ public class Main extends Application{
             }
             catch (ArithmeticException e){
                 System.out.println("division par 0");
+                frequenceValue.setText("0");
             }
         }));
 
@@ -409,6 +426,7 @@ public class Main extends Application{
 
             try {
                 frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise(), vent.getValue());
+
             }catch(NullPointerException e){
 
                 System.out.println("nullpointer exception");
@@ -419,7 +437,7 @@ public class Main extends Application{
         });
 
 
-        Pane group = new Pane(horizon, imageViewDoppler, imageView, pointe, tige, line, imageView1);
+        Pane group = new Pane(horizon, imageViewDoppler, imageView, fleche, imageView1);
         VBox vBox1 = new VBox(group);
         root3.setCenter(vBox1);
 
@@ -441,13 +459,16 @@ public class Main extends Application{
             primaryStage.setScene(scene);
         });
 
+        double finalDebutFleche = debutFleche;
         reinitialiser.setOnAction(event -> {
-           frequenceValue.setText("0");
            frequenceEmiseValue.setText("0");
            vitesseEmetteurValue.setText("0");
            vitesseRecepteurValue.setText("0");
            intensiteValue.setText("0");
            vitesseVentValue.setText("0");
+           line.setStartX(finalDebutFleche);
+           line.setEndX(finalDebutFleche);
+
 
            vitesseE.setValue(0);
            vitesseR.setValue(0);
@@ -460,6 +481,7 @@ public class Main extends Application{
 
            imageView.setImage(null);
            imageViewDoppler.setImage(dopplerImage);
+           frequenceValue.setText("0");
 
         });
 
@@ -551,6 +573,10 @@ public class Main extends Application{
             avion.setImage(image3);
             intensiteValue.setText(String.valueOf(avion.getIntensiteEmise()));
             frequenceValue.setText(String.valueOf(avion.getFrequenceEmise()));
+
+            imageView.setY(screenSize.getHeight()/15);
+            imageView.setX(screenSize.getWidth() - (rect.getWidth()*2 + 350));
+
 
             vitesseE.setMin(-1000);
             vitesseE.setMax(1000);

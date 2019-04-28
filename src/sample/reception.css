@@ -1,52 +1,29 @@
-.BorderPane{
-
-
-    -fx-background-color: aqua;
-    -fx-background-repeat: stretch;
-    -fx-background-size: 1920 1080;
-    -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
-
-}
 
 .button{
     -fx-font-style: normal;
-    -fx-font: 20 "Calibri" ;
-    -fx-background-color: deepskyblue;
+    -fx-font: 20 "Copperplate Gothic Bold" ;
+    -fx-background-color: crimson;
+    -fx-opacity: 0.9;
     -fx-text-fill: black;
+}
+
+.button:hover{
+    -fx-border-style: solid 2cm;
+    -fx-opacity: 1;
+}
+
+.button:pressed{
+    -fx-background-color: chartreuse;
 }
 
 .label{
     -fx-font-style: normal;
-    -fx-font: 20 "Calibri" ;
-    -fx-background-color: deepskyblue;
+    -fx-font: 20 "Castellar";
+    -fx-background-color: chartreuse;
     -fx-text-fill: black;
+    -fx-arc-height: 5px;
 }
 
-
-.menu-bar{
-    -fx-font-style: normal;
-    -fx-font: 14 "Calibri" ;
-    -fx-background-color: darkcyan;
-    -fx-text-fill: darkslategrey;
-    -fx-prompt-text-fill: wheat;
-
-}
-
-.menu{
-    -fx-font-style: normal;
-    -fx-font: 14 "Calibri" ;
-    -fx-background-color: darkcyan;
-    -fx-border-color: darkcyan;
-    -fx-text-fill: darkslategrey;
-    -fx-prompt-text-fill: wheat;
-}
-
-.menu-item{
-    -fx-font-style: normal;
-    -fx-font: 14 "Calibri" ;
-    -fx-background-color: darkcyan;
-    -fx-border-color: darkcyan;
-    -fx-text-fill: darkslategrey;
-    -fx-prompt-text-fill: wheat;
+.root{
+    -fx-background-color: palegoldenrod;
 }

@@ -1,51 +1,45 @@
-.BorderPane{
-
-
-    -fx-background-color: aqua;
-    -fx-background-repeat: stretch;
-    -fx-background-size: 1920 1080;
-    -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
-
-}
-
-.button{
-    -fx-font-style: normal;
-    -fx-font: 20 "Calibri" ;
-    -fx-text-fill: black;
-}
-
 .label{
     -fx-font-style: normal;
-    -fx-font: 20 "Calibri" ;
+    -fx-font: 20 "Rockwell" ;
+    -fx-font-weight: bolder;
     -fx-text-fill: black;
 }
 
 
 .menu-bar{
     -fx-font-style: normal;
-    -fx-font: 14 "Calibri" ;
-    -fx-background-color: darkcyan;
-    -fx-text-fill: darkslategrey;
-    -fx-prompt-text-fill: wheat;
-
+    -fx-font: 14 "Rockwell";
+    -fx-background-color: deepskyblue;
 }
-
 .menu{
     -fx-font-style: normal;
-    -fx-font: 14 "Calibri" ;
-    -fx-background-color: darkcyan;
-    -fx-border-color: darkcyan;
-    -fx-text-fill: darkslategrey;
-    -fx-prompt-text-fill: wheat;
+    -fx-font: 14 "Rockwell";
+    -fx-background-color: deepskyblue;
+    -fx-border-color: deepskyblue;
+    -fx-opacity: 0.9;
 }
 
 .menu-item{
     -fx-font-style: normal;
-    -fx-font: 14 "Calibri" ;
-    -fx-background-color: darkcyan;
-    -fx-border-color: darkcyan;
-    -fx-text-fill: darkslategrey;
-    -fx-prompt-text-fill: wheat;
+    -fx-font: 14 "Rockwell";
+    -fx-background-color: chocolate;
+    -fx-border-color: chocolate;
+    -fx-opacity: 0.8;
 }
+
+.menu-item:hover{
+    -fx-opacity: 1;
+    -fx-text-fill: wheat;
+}
+
+.menu-item:pressed{
+    -fx-background-color: deepskyblue;
+}
+
+.menu:hover{
+    -fx-opacity: 1;
+    -fx-background-color: #00abe5;
+}
+
+
 

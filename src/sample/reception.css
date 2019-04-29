@@ -8,12 +8,13 @@
 }
 
 .button:hover{
-    -fx-border-style: solid 2cm;
     -fx-opacity: 1;
 }
 
 .button:pressed{
     -fx-background-color: chartreuse;
+    -fx-border-color: chartreuse;
+
 }
 
 .label{
@@ -21,9 +22,9 @@
     -fx-font: 20 "Castellar";
     -fx-background-color: chartreuse;
     -fx-text-fill: black;
-    -fx-arc-height: 5px;
+    -fx-background-radius: 4;
 }
 
 .root{
-    -fx-background-color: palegoldenrod;
+    -fx-background-color: linen ;
 }

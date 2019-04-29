@@ -38,13 +38,13 @@ public class Main extends Application{
     SequentialTransition seqTrans2 = new SequentialTransition();
     SequentialTransition seqFade2 = new SequentialTransition();
     public static double frequenceRep;
-    public static int entier;
-//si pas d'emetteur, mais un protecteur --> pas supposer davoir une intensité
+    public static int entier;                                                       //Nous savons qu'il n'y a pas de source 3
+                                                                                    //quitter la partie ne veut pas dire réinitialiser
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         //SCENE1
-        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
+        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds(); //1920x1040  écran à l'école
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
 
@@ -94,8 +94,8 @@ public class Main extends Application{
         accueil2.setFitHeight(450);
         root.setLeft(accueil1);
         root.setRight(accueil2);
-        root.getLeft().setTranslateY(100);
-        root.getRight().setTranslateY(100);
+        root.getLeft().setTranslateY(125);
+        root.getRight().setTranslateY(125);
         root.getLeft().setTranslateX(100);
         root.getRight().setTranslateX(-100);
 
@@ -200,8 +200,8 @@ public class Main extends Application{
         groupVitesses.setTranslateY((screenSize.getHeight()/2) - rectA.getHeight());
 
         root3.setLeft(groupVitesses);
-        //Améliorer l'apparence
         Label label3 = new Label("Résultats");
+        label3.setAlignment(Pos.CENTER);
 
         Label intensitePercue = new Label("Intensité perçue : ");
         Label intensiteValue = new Label("0");
@@ -242,12 +242,14 @@ public class Main extends Application{
         VBox vBoxResultats = new VBox(intensite, hBoxFreq, hBoxEmise, hBoxEmetteur, hBoxRecepteur, ventH);
 
         VBox resultat = new VBox(label3, vBoxResultats);
-        resultat.setAlignment(Pos.CENTER);
+        resultat.setAlignment(Pos.CENTER_LEFT);
         resultat.setTranslateX(25);
         DropShadow dropShadow = new DropShadow(10,5,5, Color.DARKGRAY);
         Rectangle rect =  new Rectangle(310,180);
+        label3.setTranslateX((rect.getWidth()/4)+10);
         rect.setEffect(dropShadow);
         rect.setFill(Color.DEEPSKYBLUE);
+        rect.setTranslateX(15);
 
         Group groupResult = new Group(rect, resultat);
         groupResult.setTranslateY((screenSize.getHeight()/2) - rect.getHeight());
@@ -317,7 +319,7 @@ public class Main extends Application{
         imageViewDoppler.setX(screenSize.getWidth()/12);
         imageViewDoppler.setY(screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())));
 
-        if (screenSize.getHeight()<1080){
+        if (screenSize.getHeight()<1040){
             fleche.setScaleY(screenSize.getHeight()/1080);
             fleche.setTranslateY((screenSize.getHeight()-950) - (heightFleche/2));
         }
@@ -327,7 +329,7 @@ public class Main extends Application{
             debutFleche = tige.getX();
         }
 
-        int doppDepart = (int) (screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())))-100;  //rendu ici !!!!!
+        int doppDepart = (int) (screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())))-100;
         int doppFin = doppDepart+100;
 
         vitesseR.valueProperty().addListener(((observable, oldValue, newValue) -> {
@@ -351,7 +353,6 @@ public class Main extends Application{
                 frequenceValue.setText((String.valueOf(Math.round(frequenceRep))));
             }
             catch (ArithmeticException e){
-                System.out.println("division par 0");
                 frequenceValue.setText("0");
             }
             catch (NullPointerException e){
@@ -420,7 +421,6 @@ public class Main extends Application{
                 frequenceValue.setText(String.valueOf(Math.round(frequenceRep)));
             }
             catch (ArithmeticException e){
-                System.out.println("division par 0");
                 frequenceValue.setText("0");
             }
         }));
@@ -455,7 +455,6 @@ public class Main extends Application{
 
             }catch(NullPointerException e){
 
-                System.out.println("nullpointer exception");
             }
 
             frequenceValue.setText(String.valueOf(Math.round(frequenceRep)));
@@ -516,6 +515,7 @@ public class Main extends Application{
             Bouchons bouchons = new Bouchons();
             doppler.setStructure(bouchons);
             imageViewDoppler.setImage(image7);
+            if (doppler.getSource()==null){ intensiteValue.setText("0"); }
 
             doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
@@ -526,6 +526,8 @@ public class Main extends Application{
             CacheOreilles cacheOreilles = new CacheOreilles();
             doppler.setStructure(cacheOreilles);
             imageViewDoppler.setImage(image6);
+            if (doppler.getSource()==null){ intensiteValue.setText("0"); }
+
 
             doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
@@ -535,6 +537,8 @@ public class Main extends Application{
             Mur mur = new Mur();
             doppler.setStructure(mur);
             imageViewDoppler.setImage(image9);
+            if (doppler.getSource()==null){ intensiteValue.setText("0"); }
+
 
             doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
@@ -544,6 +548,8 @@ public class Main extends Application{
             Oreiller oreiller = new Oreiller();
             doppler.setStructure(oreiller);
             imageViewDoppler.setImage(image8);
+            if (doppler.getSource()==null){ intensiteValue.setText("0"); }
+
 
             doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));

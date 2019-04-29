@@ -10,7 +10,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.InnerShadow;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -20,11 +20,11 @@ import javafx.scene.paint.*;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.File;
 
 public class Main extends Application{
 
@@ -39,7 +39,7 @@ public class Main extends Application{
     SequentialTransition seqFade2 = new SequentialTransition();
     public static double frequenceRep;
     public static int entier;
-
+//si pas d'emetteur, mais un protecteur --> pas supposer davoir une intensité
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -65,21 +65,39 @@ public class Main extends Application{
         VBox centre  = new VBox(demarrer, guideUti);
         centre.setAlignment(Pos.CENTER);
         root.setCenter(centre);
-
-        InnerShadow innerShadow = new InnerShadow();
-        innerShadow.setOffsetX(2.0f);
-        innerShadow.setOffsetY(2.0f);
         titre.setScaleX(3); titre.setScaleY(3);
-        titre.setEffect(innerShadow);
         titre.setTranslateY(50);
+
+        DropShadow ds = new DropShadow(20,10,10, Color.BLACK);
+        titre.setEffect(ds);
+        titre.setPadding(new Insets(10));
 
         VBox top = new VBox(titre);
         top.setAlignment(Pos.TOP_CENTER);
         root.setTop(top);
 
+        noms.setScaleY(1.5); noms.setScaleX(1.5);
+        noms.setEffect(ds);
+        noms.setPadding(new Insets(10));
         VBox bottom = new VBox(noms);
         bottom.setAlignment(Pos.BOTTOM_CENTER);
         root.setBottom(bottom);
+        root.setPadding(new Insets(20));
+
+        Image allSources = new Image("sample/all_sources.png");
+        Image allCovers = new Image("sample/all_covers.png");
+        ImageView accueil1 = new ImageView(allSources);
+        ImageView accueil2 = new ImageView(allCovers);
+        accueil1.setPreserveRatio(true);
+        accueil2.setPreserveRatio(true);
+        accueil1.setFitHeight(450);
+        accueil2.setFitHeight(450);
+        root.setLeft(accueil1);
+        root.setRight(accueil2);
+        root.getLeft().setTranslateY(100);
+        root.getRight().setTranslateY(100);
+        root.getLeft().setTranslateX(100);
+        root.getRight().setTranslateX(-100);
 
         //SCENE2
         BorderPane root2 = new BorderPane();
@@ -88,16 +106,16 @@ public class Main extends Application{
 
         //COMPOSANTES
         Button retour = new Button("Retour");
-        Label instructions = new Label("INSTRUCTIONS À ÉCRIRE ICI" +
-                "D\n" +
-                "D\n" +
-                "D\n" +
-                "D\n" +
-                "D\n" +
-                "D\n" +
-                "D\n" +
-                "D\n" +
-                "D\n");
+        Label instructions = new Label("INSTRUCTIONS À VENIR..." +
+                ".\n" +
+                ".\n" +
+                ".\n" +
+                ".\n" +
+                ".\n" +
+                ".\n" +
+                ".\n" +
+                ".\n" +
+                ".\n");
         VBox vBox = new VBox(instructions, retour);
         vBox.setAlignment(Pos.CENTER);
         root2.setCenter(vBox);
@@ -162,7 +180,6 @@ public class Main extends Application{
         Slider vent = new Slider(-80, 80, 0);
         VBox sliders = new VBox(label, vitesseE, label2, vitesseR, label4, vent);
         sliders.setAlignment(Pos.CENTER);
-        root3.setLeft(sliders);
         vitesseE.setShowTickMarks(true);
         vitesseE.setShowTickLabels(true);
         vitesseR.setShowTickMarks(true);
@@ -174,6 +191,15 @@ public class Main extends Application{
         vent.setMinorTickCount(0);
         vent.setShowTickLabels(true);
 
+        DropShadow dropShadow1 = new DropShadow(10,-5,5, Color.DARKGRAY);
+        Rectangle rectA =  new Rectangle(180,200);
+        rectA.setEffect(dropShadow1);
+        rectA.setFill(Color.DEEPSKYBLUE);
+
+        Group groupVitesses = new Group(rectA, sliders);
+        groupVitesses.setTranslateY((screenSize.getHeight()/2) - rectA.getHeight());
+
+        root3.setLeft(groupVitesses);
         //Améliorer l'apparence
         Label label3 = new Label("Résultats");
 
@@ -218,15 +244,17 @@ public class Main extends Application{
         VBox resultat = new VBox(label3, vBoxResultats);
         resultat.setAlignment(Pos.CENTER);
         resultat.setTranslateX(25);
-        Rectangle rect =  new Rectangle(275,180);
-        rect.setFill(Color.DARKCYAN);
-                                                                        //rendu ici laurie ajouter dropshadow, lightning effect, inner shadow
+        DropShadow dropShadow = new DropShadow(10,5,5, Color.DARKGRAY);
+        Rectangle rect =  new Rectangle(310,180);
+        rect.setEffect(dropShadow);
+        rect.setFill(Color.DEEPSKYBLUE);
+
         Group groupResult = new Group(rect, resultat);
         groupResult.setTranslateY((screenSize.getHeight()/2) - rect.getHeight());
 
 
         root3.setRight(groupResult);
-        root3.setPadding(new Insets(0,10,0,10));
+        root3.setPadding(new Insets(0,5,0,5));
 
         //IMAGES
         Image image1 = new Image("Emetteur/ambulance.png");
@@ -282,14 +310,12 @@ public class Main extends Application{
 
         Line horizon = new Line(0,
                 (screenSize.getHeight()- (screenSize.getHeight()/8)),
-                 screenSize.getWidth()-275,
+                  screenSize.getWidth()+75,                                 //À ARRANGER ICI PLUS TARD, utiliser les proportions et rectamgles semblables
                 (screenSize.getHeight()-((screenSize.getHeight()/8))));
         horizon.setStroke(Color.CHOCOLATE);
         horizon.setStrokeWidth(screenSize.getHeight()/7);
         imageViewDoppler.setX(screenSize.getWidth()/12);
-        imageViewDoppler.setY(screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())));   //rogner l'images de doppler le plus petit possible
-        imageView.setX(imageViewDoppler.getX()+450);                                                                                                                  //faire dememe pour les autres aussi
-        imageView.setY(screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageView.getFitHeight())));
+        imageViewDoppler.setY(screenSize.getHeight()- ((screenSize.getHeight()/8)+ (imageViewDoppler.getFitHeight())));
 
         if (screenSize.getHeight()<1080){
             fleche.setScaleY(screenSize.getHeight()/1080);
@@ -480,6 +506,7 @@ public class Main extends Application{
            root3.setBackground(background);
 
            imageView.setImage(null);
+           imageView1.setImage(null);
            imageViewDoppler.setImage(dopplerImage);
            frequenceValue.setText("0");
 
@@ -545,6 +572,9 @@ public class Main extends Application{
             intensiteValue.setText(String.valueOf(ambulance.getIntensiteEmise()));
             frequenceValue.setText(String.valueOf(ambulance.getFrequenceEmise()));
 
+            imageView.setX(imageViewDoppler.getX()+450);
+            imageView.setY(screenSize.getHeight()- (horizon.getStrokeWidth()+ (imageView.getFitHeight())));
+
             vitesseE.setMin(-150);
             vitesseE.setMax(150);
             vitesseE.setMajorTickUnit(50);
@@ -605,8 +635,8 @@ public class Main extends Application{
             frequenceValue.setText(String.valueOf(feuxArtifice.getFrequenceEmise()));
             imageView1.setImage(image2);
 
-            imageView1.setY(100);
-            imageView1.setX(1000);
+            imageView1.setY((screenSize.getHeight()/15)-20);
+            imageView1.setX(screenSize.getWidth() - (rect.getWidth()*2.5 + 350));
 
             vitesseE.setMin(0);
             vitesseE.setMax(0);
@@ -640,6 +670,9 @@ public class Main extends Application{
             intensiteValue.setText(String.valueOf(marteau.getIntensiteEmise()));
             frequenceValue.setText(String.valueOf(marteau.getFrequenceEmise()));
 
+            imageView.setX(imageViewDoppler.getX()+450);
+            imageView.setY(screenSize.getHeight()- (horizon.getStrokeWidth()+ (imageView.getFitHeight())));
+
             vitesseE.setMin(-5);
             vitesseE.setMax(5);
             vitesseE.setMajorTickUnit(1);
@@ -667,6 +700,9 @@ public class Main extends Application{
             tondeuse.setImage(image5);
             intensiteValue.setText(String.valueOf(tondeuse.getIntensiteEmise()));
             frequenceValue.setText(String.valueOf(tondeuse.getFrequenceEmise()));
+
+            imageView.setX(imageViewDoppler.getX()+450);
+            imageView.setY(screenSize.getHeight()- (horizon.getStrokeWidth()+ (imageView.getFitHeight())));
 
             vitesseE.setMin(-5);
             vitesseE.setMax(5);

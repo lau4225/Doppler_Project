@@ -12,7 +12,7 @@ public class FeuxArtifice extends Source {
 
         setNom("Feux artifice");
         setFrequenceEmise(360);
-        setIntensiteEmise(140);
+        setIntensiteEmise(160);
     }
 
 }

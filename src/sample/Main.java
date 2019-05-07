@@ -20,10 +20,10 @@ import javafx.scene.paint.*;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.io.File;
 
 
 public class Main extends Application{
@@ -35,10 +35,10 @@ public class Main extends Application{
     private static Timeline timeline = new Timeline();
     SequentialTransition seqTrans = new SequentialTransition();
     SequentialTransition seqFade = new SequentialTransition();
-    SequentialTransition seqTrans2 = new SequentialTransition();
-    SequentialTransition seqFade2 = new SequentialTransition();
     public static double frequenceRep;
-    public static int entier;                                                       //Nous savons qu'il n'y a pas de source 3
+    public static int entier;
+    public MediaPlayer mediaPlayer;
+                                                    //rendu à faire petite méthode pour le volume
                                                                                     //quitter la partie ne veut pas dire réinitialiser
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -50,7 +50,7 @@ public class Main extends Application{
 
         scene.getStylesheets().add("sample/reception.css");
 
-        primaryStage.setTitle("Doppler Project");                               //laurie rendue a essayer de mettre les sons  A PAS PUSHER ENCORE
+        primaryStage.setTitle("Doppler Project");
         primaryStage.setWidth(screenSize.getWidth());
         primaryStage.setHeight(screenSize.getHeight());
         primaryStage.setMaximized(true);
@@ -147,9 +147,9 @@ public class Main extends Application{
         MenuItem reinitialiser = new MenuItem("Réinitialiser la partie");
         MenuItem source1 = new MenuItem("Ambulance");
         MenuItem source2 = new MenuItem("Avion");
-        MenuItem source4 = new MenuItem("Feux d'artifice");
-        MenuItem source5 = new MenuItem("Marteau piqueur");
-        MenuItem source6 = new MenuItem("Tondeuse");
+        MenuItem source3 = new MenuItem("Feux d'artifice");
+        MenuItem source4 = new MenuItem("Marteau piqueur");
+        MenuItem source5 = new MenuItem("Tondeuse");
         MenuItem structure1 = new MenuItem("Bouchons");
         MenuItem structure2 = new MenuItem("Cache Oreilles");
         MenuItem structure3 = new MenuItem("Mur");
@@ -158,7 +158,7 @@ public class Main extends Application{
 
 
         structure.getItems().addAll(structure1, structure2, structure3, structure4, structure5);
-        source.getItems().addAll(source1, source2, source4, source5, source6);
+        source.getItems().addAll(source1, source2, source3, source4, source5);
         option.getItems().addAll(quitter, reinitialiser);
         menuBar.getMenus().addAll(source, structure, option);
 
@@ -467,6 +467,17 @@ public class Main extends Application{
         VBox vBox1 = new VBox(group);
         root3.setCenter(vBox1);
 
+        //SONS AUDIO
+        String[] musicFiles = {"C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\ambulance.mp3",
+                "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\avion.mp3",
+                "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\fireworks.mp3",
+                "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\marteaupiqueur.mp3",
+                "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\tondeuse.mp3"};
+        Media[] audios = {new Media(new File(musicFiles[0]).toURI().toString()),
+                new Media(new File(musicFiles[1]).toURI().toString()),
+                new Media(new File(musicFiles[2]).toURI().toString()),
+                new Media(new File(musicFiles[3]).toURI().toString()),
+                new Media(new File(musicFiles[4]).toURI().toString())};
 
         //ONACTION
         guideUti.setOnAction(event -> {
@@ -510,6 +521,8 @@ public class Main extends Application{
            imageViewDoppler.setImage(dopplerImage);
            frequenceValue.setText("0");
 
+           try { mediaPlayer.stop(); }catch (NullPointerException e){ }
+
         });
 
         structure1.setOnAction(event -> {
@@ -521,6 +534,7 @@ public class Main extends Application{
             doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
 
+           try { mediaPlayer.setVolume(0.5); }catch (Exception e){ }
         });
 
         structure2.setOnAction(event -> {
@@ -532,6 +546,8 @@ public class Main extends Application{
 
             doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+
+            try { mediaPlayer.setVolume(0.5); }catch (Exception e){ }
         });
 
         structure3.setOnAction(event -> {
@@ -543,6 +559,8 @@ public class Main extends Application{
 
             doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+
+            try { mediaPlayer.setVolume(0); }catch (Exception e){ }
         });
 
         structure4.setOnAction(event -> {
@@ -554,12 +572,14 @@ public class Main extends Application{
 
             doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+
+            try { mediaPlayer.setVolume(0.3); }catch (Exception e){ }
         });
 
         structure5.setOnAction(event -> {
             doppler.setStructure(null);
             imageViewDoppler.setImage(dopplerImage);
-
+            doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
 
             try{
                 intensiteValue.setText(String.valueOf(doppler.getSource().getIntensiteEmise()));
@@ -567,6 +587,7 @@ public class Main extends Application{
                 System.out.println("null pointer strusture 5 aucun");
             }
 
+            try { mediaPlayer.setVolume(1); }catch (Exception e){ }
         });
 
         source1.setOnAction(event -> {
@@ -592,16 +613,13 @@ public class Main extends Application{
             doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-           /* String musicFile = "";
-            Media audio = new Media(new File(musicFile).toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();*/
+            sound(audios[0]);
+
             frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), ambulance.getFrequenceEmise(), vent.getValue());
 
         });
 
         source2.setOnAction(event -> {
-            //pas son
             reinitialiser.fire();
             Avion avion = new Avion();
             doppler.setSource(avion);
@@ -625,15 +643,12 @@ public class Main extends Application{
             doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-          /*  String musicFile = "";
-            Media audio = new Media(new File(musicFile).toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();*/
+            sound(audios[1]);
 
             frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), avion.getFrequenceEmise(), vent.getValue());
         });
 
-        source4.setOnAction(event -> {
+        source3.setOnAction(event -> {
             reinitialiser.fire();
             FeuxArtifice feuxArtifice = new FeuxArtifice();
             doppler.setSource(feuxArtifice);
@@ -659,15 +674,13 @@ public class Main extends Application{
             doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-           /* String musicFile = "";
-            Media audio = new Media(new File(musicFile).toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();*/
+
+            sound(audios[2]);
 
            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), feuxArtifice.getFrequenceEmise(), vent.getValue());
         });
 
-        source5.setOnAction(event -> {
+        source4.setOnAction(event -> {
             reinitialiser.fire();
             Marteau marteau = new Marteau();
             doppler.setSource(marteau);
@@ -690,15 +703,12 @@ public class Main extends Application{
             doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-           /* String musicFile = "";
-            Media audio = new Media(new File(musicFile).toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();*/
+            sound(audios[3]);
 
             frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), marteau.getFrequenceEmise(), vent.getValue());
         });
 
-        source6.setOnAction(event -> {
+        source5.setOnAction(event -> {
             reinitialiser.fire();
             Tondeuse tondeuse = new Tondeuse();
             doppler.setSource(tondeuse);
@@ -721,10 +731,7 @@ public class Main extends Application{
             doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-         /*   String musicFile = "";
-            Media audio = new Media(new File(musicFile).toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(audio);
-            mediaPlayer.play();*/
+            sound(audios[4]);
 
             frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), tondeuse.getFrequenceEmise(), vent.getValue());
         });
@@ -732,7 +739,34 @@ public class Main extends Application{
         primaryStage.show();
     }
 
+    public void sound(Media media){
+        try { mediaPlayer.stop(); }catch (NullPointerException e){}
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(1);
+        mediaPlayer.play();
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    }
 
+    public void volume(Line line, double intensite){                //rendue ici
 
+        //valeur de la position conversion
+        if (intensite <= 84){
 
+            line.setStartX(1225);
+            line.setEndX(1225);
+
+        }
+        else if (intensite > 84 && intensite < 110){
+
+            line.setStartX(1325);
+            line.setEndX(1325);
+
+        }
+        else if (intensite >=110){
+
+            line.setStartX(1450);
+            line.setEndX(1450);
+
+        }
+    }
 }

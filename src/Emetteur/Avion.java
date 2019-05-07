@@ -9,7 +9,7 @@ public class Avion extends Source {
 
         setNom("Avion");
         setFrequenceEmise(500);
-        setIntensiteEmise(120);
+        setIntensiteEmise(135);
     }
 
 }

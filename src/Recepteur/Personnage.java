@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import sample.Main;
 
 public class Personnage extends Application {
 

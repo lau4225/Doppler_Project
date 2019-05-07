@@ -8,7 +8,7 @@ public class Tondeuse extends Source {
     public Tondeuse(){
 
         setNom("Tondeuse");
-        setIntensiteEmise(80);
+        setIntensiteEmise(85);
         setFrequenceEmise(250);
     }
 

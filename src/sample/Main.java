@@ -50,7 +50,7 @@ public class Main extends Application{
 
         scene.getStylesheets().add("sample/reception.css");
 
-        primaryStage.setTitle("Doppler Project");
+        primaryStage.setTitle("Doppler Project");                               //laurie rendue a essayer de mettre les sons  A PAS PUSHER ENCORE
         primaryStage.setWidth(screenSize.getWidth());
         primaryStage.setHeight(screenSize.getHeight());
         primaryStage.setMaximized(true);
@@ -116,6 +116,7 @@ public class Main extends Application{
                 ".\n" +
                 ".\n" +
                 ".\n");
+        instructions.setEffect(ds);
         VBox vBox = new VBox(instructions, retour);
         vBox.setAlignment(Pos.CENTER);
         root2.setCenter(vBox);
@@ -312,7 +313,7 @@ public class Main extends Application{
 
         Line horizon = new Line(0,
                 (screenSize.getHeight()- (screenSize.getHeight()/8)),
-                  screenSize.getWidth()+75,                                 //À ARRANGER ICI PLUS TARD, utiliser les proportions et rectamgles semblables
+                  screenSize.getWidth()- 100,                                 //À ARRANGER ICI PLUS TARD, utiliser les proportions et rectamgles semblables
                 (screenSize.getHeight()-((screenSize.getHeight()/8))));
         horizon.setStroke(Color.CHOCOLATE);
         horizon.setStrokeWidth(screenSize.getHeight()/7);

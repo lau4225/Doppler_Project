@@ -20,9 +20,10 @@
 .label{
     -fx-font-style: normal;
     -fx-font: 20 "Castellar";
+    -fx-font-weight: bolder;
     -fx-background-color: chartreuse;
     -fx-text-fill: black;
-    -fx-background-radius: 4;
+    -fx-background-radius: 3;
 }
 
 .root{

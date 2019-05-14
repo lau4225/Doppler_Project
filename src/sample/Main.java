@@ -533,6 +533,7 @@ public class Main extends Application{
 
             doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+           volume(Double.parseDouble(intensiteValue.getText()), mediaPlayer, doppler.getSource().getIntensiteEmise());
 
            try { mediaPlayer.setVolume(0.5); }catch (Exception e){ }
         });
@@ -542,10 +543,9 @@ public class Main extends Application{
             doppler.setStructure(cacheOreilles);
             imageViewDoppler.setImage(image6);
             if (doppler.getSource()==null){ intensiteValue.setText("0"); }
-
-
-            doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
+            else { doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
             intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+            volume(Double.parseDouble(intensiteValue.getText()), mediaPlayer, doppler.getSource().getIntensiteEmise());}
 
             try { mediaPlayer.setVolume(0.5); }catch (Exception e){ }
         });
@@ -555,10 +555,9 @@ public class Main extends Application{
             doppler.setStructure(mur);
             imageViewDoppler.setImage(image9);
             if (doppler.getSource()==null){ intensiteValue.setText("0"); }
-
-
-            doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
-            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+            else { doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
+                intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+                volume(Double.parseDouble(intensiteValue.getText()), mediaPlayer, doppler.getSource().getIntensiteEmise());}
 
             try { mediaPlayer.setVolume(0); }catch (Exception e){ }
         });
@@ -568,10 +567,9 @@ public class Main extends Application{
             doppler.setStructure(oreiller);
             imageViewDoppler.setImage(image8);
             if (doppler.getSource()==null){ intensiteValue.setText("0"); }
-
-
-            doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
-            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+            else { doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
+                intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+                volume(Double.parseDouble(intensiteValue.getText()), mediaPlayer, doppler.getSource().getIntensiteEmise());}
 
             try { mediaPlayer.setVolume(0.3); }catch (Exception e){ }
         });
@@ -747,26 +745,12 @@ public class Main extends Application{
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
 
-    public void volume(Line line, double intensite){                //rendue ici
+    public void volume(double intensitePercue, MediaPlayer mediaPlayer, double intensiteInitiale){                //rendue ici
 
         //valeur de la position conversion
-        if (intensite <= 84){
-
-            line.setStartX(1225);
-            line.setEndX(1225);
-
-        }
-        else if (intensite > 84 && intensite < 110){
-
-            line.setStartX(1325);
-            line.setEndX(1325);
-
-        }
-        else if (intensite >=110){
-
-            line.setStartX(1450);
-            line.setEndX(1450);
-
+        if (intensitePercue == 0){ try { mediaPlayer.setVolume(0); }catch (Exception e){ } }
+        else {
+            mediaPlayer.setVolume(Math.round(intensitePercue/intensiteInitiale));
         }
     }
 }

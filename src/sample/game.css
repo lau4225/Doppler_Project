@@ -41,5 +41,18 @@
     -fx-background-color: #00abe5;
 }
 
+.button:hover{
+    -fx-background-opacity: 1;
+}
+
+.button{
+    -fx-background-color: deepskyblue;
+    -fx-background-opacity: 0.9;
+}
+
+.button:pressed{
+    -fx-background-color: wheat;
+}
+
 
 

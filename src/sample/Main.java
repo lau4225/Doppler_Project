@@ -38,7 +38,6 @@ public class Main extends Application{
     public static double frequenceRep;
     public static int entier;
     public MediaPlayer mediaPlayer;
-                                                    //rendu à faire petite méthode pour le volume
                                                                                     //quitter la partie ne veut pas dire réinitialiser
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -135,7 +134,6 @@ public class Main extends Application{
                 bSize));
 
         root3.setBackground(background);
-
 
         //CREATION DU MENU
         MenuBar menuBar = new MenuBar();
@@ -252,9 +250,29 @@ public class Main extends Application{
         rect.setFill(Color.DEEPSKYBLUE);
         rect.setTranslateX(15);
 
-        Group groupResult = new Group(rect, resultat);
-        groupResult.setTranslateY((screenSize.getHeight()/2) - rect.getHeight());
+        //SILENCIEUX
+        Image soundOn = new Image("sample/soundON.png");                        // NE FONCTIONNE PAS ;( RENDUE ICI
+        Image soundOff = new Image("sample/mute.png");
+        ImageView bruit = new ImageView(soundOn);
+        ImageView mute = new ImageView(soundOff);
+        Button silencieux = new Button();
+        silencieux.setGraphic(bruit);
+        mute.setFitHeight(75);mute.setPreserveRatio(true);
+        bruit.setFitHeight(75);bruit.setPreserveRatio(true);
+        silencieux.setOnAction((event)-> {
+            if (mediaPlayer.isMute()) {
+                silencieux.setGraphic(bruit);
+                mediaPlayer.setMute(false);
+            }
+            else if (!mediaPlayer.isMute()){ silencieux.setGraphic(mute);mediaPlayer.setMute(true); } });
 
+        Group groupResult = new Group(rect, resultat, silencieux);
+        VBox droite = new VBox(silencieux, groupResult);
+        droite.setAlignment(Pos.CENTER);
+        droite.setTranslateY(-100);
+        //silencieux.setTranslateX(100);
+        silencieux.setEffect(dropShadow);
+        groupResult.setTranslateY(100);
 
         root3.setRight(groupResult);
         root3.setPadding(new Insets(0,5,0,5));
@@ -278,7 +296,6 @@ public class Main extends Application{
         ImageView imageView1 = new ImageView();
         imageView1.setPreserveRatio(true);
         imageView1.setFitHeight(300);
-
 
         //Charte de Décibels
         Rectangle tige = new Rectangle(250, 50);
@@ -479,8 +496,9 @@ public class Main extends Application{
                 new Media(new File(musicFiles[3]).toURI().toString()),
                 new Media(new File(musicFiles[4]).toURI().toString())};
 
+
         //ONACTION
-        guideUti.setOnAction(event -> {
+        guideUti.setOnAction(event -> {                             //A FAIRE ICI LES INSTRUCTIONS
             primaryStage.setScene(scene2);
         });
 
@@ -529,49 +547,28 @@ public class Main extends Application{
             Bouchons bouchons = new Bouchons();
             doppler.setStructure(bouchons);
             imageViewDoppler.setImage(image7);
-            if (doppler.getSource()==null){ intensiteValue.setText("0"); }
-
-            doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
-           intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
-           volume(Double.parseDouble(intensiteValue.getText()), mediaPlayer, doppler.getSource().getIntensiteEmise());
-
-           try { mediaPlayer.setVolume(0.5); }catch (Exception e){ }
+            protection(doppler, intensiteValue, line);
         });
 
         structure2.setOnAction(event -> {
             CacheOreilles cacheOreilles = new CacheOreilles();
             doppler.setStructure(cacheOreilles);
             imageViewDoppler.setImage(image6);
-            if (doppler.getSource()==null){ intensiteValue.setText("0"); }
-            else { doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
-            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
-            volume(Double.parseDouble(intensiteValue.getText()), mediaPlayer, doppler.getSource().getIntensiteEmise());}
-
-            try { mediaPlayer.setVolume(0.5); }catch (Exception e){ }
+            protection(doppler, intensiteValue, line);
         });
 
         structure3.setOnAction(event -> {
             Mur mur = new Mur();
             doppler.setStructure(mur);
             imageViewDoppler.setImage(image9);
-            if (doppler.getSource()==null){ intensiteValue.setText("0"); }
-            else { doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
-                intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
-                volume(Double.parseDouble(intensiteValue.getText()), mediaPlayer, doppler.getSource().getIntensiteEmise());}
-
-            try { mediaPlayer.setVolume(0); }catch (Exception e){ }
+            protection(doppler, intensiteValue, line);
         });
 
         structure4.setOnAction(event -> {
             Oreiller oreiller = new Oreiller();
             doppler.setStructure(oreiller);
             imageViewDoppler.setImage(image8);
-            if (doppler.getSource()==null){ intensiteValue.setText("0"); }
-            else { doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
-                intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
-                volume(Double.parseDouble(intensiteValue.getText()), mediaPlayer, doppler.getSource().getIntensiteEmise());}
-
-            try { mediaPlayer.setVolume(0.3); }catch (Exception e){ }
+            protection(doppler, intensiteValue, line);
         });
 
         structure5.setOnAction(event -> {
@@ -737,6 +734,13 @@ public class Main extends Application{
         primaryStage.show();
     }
 
+    public void protection(Personnage doppler,Label intensiteValue,Line line){
+        if (doppler.getSource()==null){ intensiteValue.setText("0"); }
+        else { doppler.Decibels(line, doppler.getStructure().Isolation(doppler.getSource()));
+            intensiteValue.setText(String.valueOf(doppler.getStructure().Isolation(doppler.getSource())));
+            volume(Double.parseDouble(intensiteValue.getText()), mediaPlayer, doppler.getSource().getIntensiteEmise());}
+    }
+
     public void sound(Media media){
         try { mediaPlayer.stop(); }catch (NullPointerException e){}
         mediaPlayer = new MediaPlayer(media);
@@ -745,12 +749,8 @@ public class Main extends Application{
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
 
-    public void volume(double intensitePercue, MediaPlayer mediaPlayer, double intensiteInitiale){                //rendue ici
-
-        //valeur de la position conversion
+    public void volume(double intensitePercue, MediaPlayer mediaPlayer, double intensiteInitiale){
         if (intensitePercue == 0){ try { mediaPlayer.setVolume(0); }catch (Exception e){ } }
-        else {
-            mediaPlayer.setVolume(Math.round(intensitePercue/intensiteInitiale));
-        }
+        else { mediaPlayer.setVolume((intensitePercue/intensiteInitiale)); }
     }
 }

@@ -153,6 +153,7 @@ public class Main extends Application{
                 "page7"};
 
         Label instructions = new Label(tabInstructions[0]);
+        instructions.setMaxWidth(screenSize.getWidth()-50);
         instructions.setEffect(ds);
         instructions.setAlignment(Pos.TOP_CENTER);
         VBox box = new VBox(instructions);

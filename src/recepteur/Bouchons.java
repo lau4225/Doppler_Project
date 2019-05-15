@@ -1,6 +1,6 @@
-package Recepteur;
+package recepteur;
 
-import Emetteur.Source;
+import emetteur.Source;
 
 public class Bouchons extends Structure {
 

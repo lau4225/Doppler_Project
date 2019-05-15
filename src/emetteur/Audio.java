@@ -1,4 +1,4 @@
-package Emetteur;
+package emetteur;
 
 import javafx.application.Application;
 import javafx.scene.media.Media;

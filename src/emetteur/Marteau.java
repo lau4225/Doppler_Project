@@ -1,7 +1,4 @@
-package Emetteur;
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+package emetteur;
 
 public class Marteau extends Source {
 

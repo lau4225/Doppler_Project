@@ -1,4 +1,4 @@
-package Recepteur;
+package recepteur;
 
 public class Doppler extends Personnage{
 

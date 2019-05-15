@@ -1,8 +1,5 @@
-package Emetteur;
+package emetteur;
 
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class Ambulance extends Source{
 

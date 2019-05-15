@@ -1,7 +1,7 @@
 package sample;
 
-import Emetteur.*;
-import Recepteur.*;
+import emetteur.*;
+import recepteur.*;
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -103,22 +103,79 @@ public class Main extends Application{
         Scene scene2  = new Scene(root2, screenSize.getWidth(), screenSize.getHeight());
         scene2.getStylesheets().add("sample/reception.css");
 
-        //COMPOSANTES
+        //INSTRUCTIONS
         Button retour = new Button("Retour");
-        Label instructions = new Label("INSTRUCTIONS À VENIR..." +
-                ".\n" +
-                ".\n" +
-                ".\n" +
-                ".\n" +
-                ".\n" +
-                ".\n" +
-                ".\n" +
-                ".\n" +
-                ".\n");
+        Button next = new Button("→");
+        final int[] current = {0};
+        Label index = new Label(" " + (current[0]+1) + " / 7 ");
+        Button previous = new Button("←");
+        HBox pages = new HBox(previous, index, next);
+        pages.setSpacing(10);
+        VBox controle = new VBox(pages, retour);
+        controle.setSpacing(10);
+
+        root2.setBottom(controle);
+
+        pages.setAlignment(Pos.CENTER);
+        controle.setAlignment(Pos.CENTER);
+
+        Image[] tabPages = {new Image("sample/-debut.JPG"), new Image("sample/-source.png"), new Image("sample/-mouvement.png"),
+                new Image("sample/-structure.png"),  new Image("sample/-mute.png"), new Image("sample/-reinitialiser.png"),
+                new Image("sample/-quitter.png")};
+        ImageView currentPage = new ImageView(tabPages[0]);
+        currentPage.setFitHeight(400);currentPage.setPreserveRatio(true);
+
+        root2.setCenter(currentPage);
+
+        String tabInstructions[] = {"Bienvenue dans l’application Doppler au pays des bruits. Cette application est une simulation simplifiée " +
+                "de l’effet Doppler qui a été conçue pour prévenir les dangers auxquels un observateur peut être exposé." +
+                "Le programme a été réalisé afin d’illustrer les répercussions d’une intensité trop élevée sur l’audition humaine. À partir de seulement 80 dB" +
+                " est le niveau auquel les dommages à l’audition commencent. Cette intensité est l’équivalent du bruit moyen de la circulation en ville. " +
+                "Les effets d’une exposition de huit heures par jour deviennent dangereux à long terme pour un observateur. En revanche, les effets d’une " +
+                "intensité de 120 dB et plus sont immédiats. Cette intensité est le seuil de douleur de l’audition humaine. ",
+
+
+                "page2",
+
+
+                "page3",
+
+
+                "page4",
+
+
+                "page5",
+
+
+                "page6",
+
+
+                "page7"};
+
+        Label instructions = new Label(tabInstructions[0]);
         instructions.setEffect(ds);
-        VBox vBox = new VBox(instructions, retour);
-        vBox.setAlignment(Pos.CENTER);
-        root2.setCenter(vBox);
+        instructions.setAlignment(Pos.TOP_CENTER);
+        VBox box = new VBox(instructions);
+        root2.setTop(box);
+        box.setAlignment(Pos.CENTER);
+
+
+        next.setOnAction(event -> {
+
+            if (current[0] == 6){ }
+            else { current[0]++;
+            currentPage.setImage(tabPages[current[0]]);
+            instructions.setText(tabInstructions[current[0]]);
+            }
+        });
+
+        previous.setOnAction(event -> {
+            if (current[0] == 0){ }
+            else { current[0]--;
+                currentPage.setImage(tabPages[current[0]]);
+                instructions.setText(tabInstructions[current[0]]);
+            }
+        });
 
         //SCENE3
         BorderPane root3 = new BorderPane();
@@ -163,7 +220,7 @@ public class Main extends Application{
         //DOPPLER
         Personnage doppler = new Personnage();
         doppler.setNom("Doppler");
-        Image dopplerImage = new Image("Recepteur/doppler.png");
+        Image dopplerImage = new Image("recepteur/doppler.png");
         doppler.setImage(dopplerImage);
         ImageView imageViewDoppler = new ImageView(dopplerImage);
         imageViewDoppler.setPreserveRatio(true);
@@ -251,42 +308,47 @@ public class Main extends Application{
         rect.setTranslateX(15);
 
         //SILENCIEUX
-        Image soundOn = new Image("sample/soundON.png");                        // NE FONCTIONNE PAS ;( RENDUE ICI
+        Image soundOn = new Image("sample/soundON.png");
         Image soundOff = new Image("sample/mute.png");
         ImageView bruit = new ImageView(soundOn);
         ImageView mute = new ImageView(soundOff);
         Button silencieux = new Button();
         silencieux.setGraphic(bruit);
-        mute.setFitHeight(75);mute.setPreserveRatio(true);
-        bruit.setFitHeight(75);bruit.setPreserveRatio(true);
+        mute.setFitHeight(28);mute.setPreserveRatio(true);
+        bruit.setFitHeight(28);bruit.setPreserveRatio(true);
         silencieux.setOnAction((event)-> {
-            if (mediaPlayer.isMute()) {
-                silencieux.setGraphic(bruit);
-                mediaPlayer.setMute(false);
+            try{
+            if (mediaPlayer.getMedia()!=null){
+                if (mediaPlayer.isMute()) {
+                    silencieux.setGraphic(bruit);
+                    mediaPlayer.setMute(false);
+                }
+                else if (!mediaPlayer.isMute()){ silencieux.setGraphic(mute);mediaPlayer.setMute(true); }
+            }}catch (NullPointerException e){
+
             }
-            else if (!mediaPlayer.isMute()){ silencieux.setGraphic(mute);mediaPlayer.setMute(true); } });
+        });
+        Group groupResult = new Group(rect, resultat);
+        Group droite = new Group(groupResult, silencieux);
+        DropShadow dropShadow2 = new DropShadow(10, Color.WHITE);
+        silencieux.setEffect(dropShadow2);
+        silencieux.setTranslateY(-37); silencieux.setTranslateX(rect.getWidth());
+        groupResult.setTranslateY((screenSize.getHeight()/2)-(rect.getHeight()));
 
-        Group groupResult = new Group(rect, resultat, silencieux);
-        VBox droite = new VBox(silencieux, groupResult);
-        droite.setAlignment(Pos.CENTER);
-        droite.setTranslateY(-100);
-        //silencieux.setTranslateX(100);
-        silencieux.setEffect(dropShadow);
-        groupResult.setTranslateY(100);
-
-        root3.setRight(groupResult);
+        Pane pane = new Pane(droite);
+        root3.setRight(pane);
         root3.setPadding(new Insets(0,5,0,5));
 
         //IMAGES
-        Image image1 = new Image("Emetteur/ambulance.png");
-        Image image3 = new Image("Emetteur/avion.png");
-        Image image4 = new Image("Emetteur/marteau-piqueur.png");
-        Image image5 = new Image("Emetteur/tondeuse.png");
-        Image image2 = new Image("Emetteur/feux_artifices.png");
-        Image image6 = new Image("Recepteur/dopp_auditif.png");
-        Image image7 = new Image("Recepteur/dopp_bouchons.png");
-        Image image8 = new Image("Recepteur/dopp_oreiller.png");
-        Image image9 = new Image("Recepteur/dopp_murs.png");
+        Image image1 = new Image("emetteur/ambulance.png");
+        Image image3 = new Image("emetteur/avion.png");
+        Image image4 = new Image("emetteur/marteau-piqueur.png");
+        Image image5 = new Image("emetteur/tondeuse.png");
+        Image image2 = new Image("emetteur/feux_artifices.png");
+        Image image6 = new Image("recepteur/dopp_auditif.png");
+        Image image7 = new Image("recepteur/dopp_bouchons.png");
+        Image image8 = new Image("recepteur/dopp_oreiller.png");
+        Image image9 = new Image("recepteur/dopp_murs.png");
         Image ventD = new Image("sample/ventDroite.png");
         Image ventG = new Image("sample/ventGauche.png");
 
@@ -438,9 +500,8 @@ public class Main extends Application{
                 frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), doppler.getSource().getFrequenceEmise(), vent.getValue());
                 frequenceValue.setText(String.valueOf(Math.round(frequenceRep)));
             }
-            catch (ArithmeticException e){
-                frequenceValue.setText("0");
-            }
+            catch (ArithmeticException e){ frequenceValue.setText("0"); }
+            catch (NullPointerException e){}
         }));
 
         vent.valueProperty().addListener((observable, oldValue, newValue) -> {

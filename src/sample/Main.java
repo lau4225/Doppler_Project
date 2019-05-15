@@ -547,12 +547,17 @@ public class Main extends Application{
         root3.setCenter(vBox1);
 
         //SONS AUDIO
-        String[] musicFiles = {"C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\ambulance.mp3",
+        String[] musicFiles = {"sample/ambulance.mp3","sample/avion.mp3", "sample/fireworks.mp3",
+                "sample/marteaupiqueur.mp3", "sample/tondeuse.mp3"};
+
+                /*{"C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\ambulance.mp3",
                 "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\avion.mp3",
                 "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\fireworks.mp3",
                 "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\marteaupiqueur.mp3",
-                "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\tondeuse.mp3"};
-        Media[] audios = {new Media(new File(musicFiles[0]).toURI().toString()),
+                "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\tondeuse.mp3"};*/
+
+
+                Media[] audios = {new Media(new File(musicFiles[0]).toURI().toString()),
                 new Media(new File(musicFiles[1]).toURI().toString()),
                 new Media(new File(musicFiles[2]).toURI().toString()),
                 new Media(new File(musicFiles[3]).toURI().toString()),

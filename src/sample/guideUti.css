@@ -1,0 +1,36 @@
+
+.button{
+    -fx-font-style: normal;
+    -fx-font: 20 "Copperplate Gothic Bold" ;
+    -fx-background-color: crimson;
+    -fx-opacity: 0.9;
+    -fx-text-fill: black;
+}
+
+.button:hover{
+    -fx-opacity: 1;
+}
+
+.button:pressed{
+    -fx-background-color: chartreuse;
+    -fx-border-color: chartreuse;
+
+}
+
+.label{
+    -fx-font-style: normal;
+    -fx-font: 16 "Arial";
+    -fx-font-weight: bolder;
+    -fx-background-color: chartreuse;
+    -fx-text-fill: black;
+    -fx-background-radius: 3;
+}
+
+.root{
+    -fx-background-color: linen;
+    -fx-spacing: 5px;
+}
+
+
+
+

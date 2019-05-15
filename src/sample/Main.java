@@ -1,6 +1,10 @@
 package sample;
 
 import emetteur.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import recepteur.*;
 import javafx.animation.*;
 import javafx.application.Application;
@@ -38,7 +42,6 @@ public class Main extends Application{
     public static double frequenceRep;
     public static int entier;
     public MediaPlayer mediaPlayer;
-                                                                                    //quitter la partie ne veut pas dire réinitialiser
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -101,7 +104,7 @@ public class Main extends Application{
         //SCENE2
         BorderPane root2 = new BorderPane();
         Scene scene2  = new Scene(root2, screenSize.getWidth(), screenSize.getHeight());
-        scene2.getStylesheets().add("sample/reception.css");
+        scene2.getStylesheets().add("sample/guideUti.css");
 
         //INSTRUCTIONS
         Button retour = new Button("Retour");
@@ -124,42 +127,75 @@ public class Main extends Application{
                 new Image("sample/-quitter.png")};
         ImageView currentPage = new ImageView(tabPages[0]);
         currentPage.setFitHeight(400);currentPage.setPreserveRatio(true);
-
+        DropShadow dropShadow3 = new DropShadow(20,10,10, Color.BLACK);
+        currentPage.setEffect(dropShadow3);
         root2.setCenter(currentPage);
 
-        String tabInstructions[] = {"Bienvenue dans l’application Doppler au pays des bruits. Cette application est une simulation simplifiée " +
-                "de l’effet Doppler qui a été conçue pour prévenir les dangers auxquels un observateur peut être exposé." +
-                "Le programme a été réalisé afin d’illustrer les répercussions d’une intensité trop élevée sur l’audition humaine. À partir de seulement 80 dB" +
-                " est le niveau auquel les dommages à l’audition commencent. Cette intensité est l’équivalent du bruit moyen de la circulation en ville. " +
-                "Les effets d’une exposition de huit heures par jour deviennent dangereux à long terme pour un observateur. En revanche, les effets d’une " +
-                "intensité de 120 dB et plus sont immédiats. Cette intensité est le seuil de douleur de l’audition humaine. ",
+        String tabInstructions[] = {"Bienvenue dans l’application Doppler au pays des bruits. Cette application est une simulation \n" +
+                                    "simplifiée de l’effet Doppler qui a été conçue pour prévenir les dangers auxquels un observateur \n" +
+                                    "peut être exposé. Le programme a été réalisé afin d’illustrer les répercussions d’une intensité \n" +
+                                    "trop élevée sur l’audition humaine. \n\n",
 
 
-                "page2",
+                                    "En cliquant sur le bouton « Démarrer », une nouvelle simulation commence.\n \n" +
+                                    "Au début de la simulation, il est recommandé de sélectionner une source afin que les méthodes de \n" +
+                                            "calculs soient exploitées. \n \n",
 
 
-                "page3",
+                "Utilisez les barres de défilement pour changer les vitesses des trois variables: \n" +
+                        "-Le personnage de Doppler\n" +
+                        "-La source sonore\n" +
+                        "-Le vent \n \n" +
+                        "Observez et écoutez les résultats des calculs ainsi que la flèche indiquant si le \n" +
+                        "niveau sonore représente un danger pour l'oreille humaine",
 
 
-                "page4",
+                "Ajoutez une structure protectrice pour les oreilles de Doppler\n \n" +
+                        "Voyez comment celle-ci peux influencer le niveau de danger sonore",
 
 
-                "page5",
+                "Cliquez sur l'icône du son pour mettre la simulation en mode silencieux ou bruyant",
 
 
-                "page6",
+                "Cliquez sur « Réinitialiser la partie » pour remettre les variables à leur valeur \n" +
+                        "de départ en enlever la source sonore",
 
 
-                "page7"};
+                "Cliquez sur « Quitter » pour revenir à la page de démarrage tout en gardant \nla simulation active"};
+
+        Label info1 = new Label("À partir de seulement 80 dB \n" +
+                                     "est le niveau auquel les dommages \n" +
+                                     "à l’audition commencent. Cette \n" +
+                                     "intensité est l’équivalent du bruit \n" +
+                                     "moyen de la circulation en ville. ");
+        Label info2 = new Label("Les effets d’une exposition de huit \n" +
+                                     "heures par jour deviennent \n" +
+                                     "dangereux à long terme pour un \n" +
+                                     "observateur. En revanche, les effets \n" +
+                                     "d’une intensité de 120 dB et plus \n" +
+                                     "sont immédiats. Cette intensité est \n" +
+                                     "le seuil de douleur de l’audition \n" +
+                                     "humaine. ");
+        root2.setLeft(info1); root2.setRight(info2);
+        info1.autosize();info2.autosize();
+        info1.setEffect(dropShadow3);info2.setEffect(dropShadow3);
+        info1.setTextAlignment(TextAlignment.JUSTIFY);info2.setTextAlignment(TextAlignment.JUSTIFY);
+        info1.setPadding(new Insets(5));info2.setPadding(new Insets(5));
+        info1.setAlignment(Pos.CENTER);info2.setAlignment(Pos.CENTER);
+        info1.setTranslateY(150);info2.setTranslateY(150);
 
         Label instructions = new Label(tabInstructions[0]);
-        instructions.setMaxWidth(screenSize.getWidth()-50);
-        instructions.setEffect(ds);
-        instructions.setAlignment(Pos.TOP_CENTER);
+        instructions.setMaxWidth(screenSize.getWidth()-400);
+        instructions.setMinHeight(100);
+        instructions.autosize(); instructions.setPadding(new Insets(5));
+        instructions.setTextAlignment(TextAlignment.JUSTIFY);
+
+        instructions.setEffect(dropShadow3);
+        instructions.setAlignment(Pos.CENTER);
         VBox box = new VBox(instructions);
         root2.setTop(box);
         box.setAlignment(Pos.CENTER);
-
+        root2.setPadding(new Insets(8));
 
         next.setOnAction(event -> {
 
@@ -167,14 +203,18 @@ public class Main extends Application{
             else { current[0]++;
             currentPage.setImage(tabPages[current[0]]);
             instructions.setText(tabInstructions[current[0]]);
+            index.setText(" " + (current[0]+1) + " / 7 ");
+            root2.setLeft(null); root2.setRight(null);
             }
         });
 
         previous.setOnAction(event -> {
-            if (current[0] == 0){ }
+            if (current[0] == 0){ root2.setLeft(info1); root2.setRight(info2); }
             else { current[0]--;
                 currentPage.setImage(tabPages[current[0]]);
                 instructions.setText(tabInstructions[current[0]]);
+                index.setText(" " + (current[0]+1) + " / 7 ");
+                if (current[0] == 0){ root2.setLeft(info1); root2.setRight(info2); }
             }
         });
 
@@ -547,14 +587,17 @@ public class Main extends Application{
         root3.setCenter(vBox1);
 
         //SONS AUDIO
-        String[] musicFiles = {"sample/ambulance.mp3","sample/avion.mp3", "sample/fireworks.mp3",
-                "sample/marteaupiqueur.mp3", "sample/tondeuse.mp3"};
-
-                /*{"C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\ambulance.mp3",
+        String[] musicFiles = {"C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\ambulance.mp3",
                 "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\avion.mp3",
                 "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\fireworks.mp3",
                 "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\marteaupiqueur.mp3",
-                "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\tondeuse.mp3"};*/
+                "C:\\Users\\Utilisateur\\IdeaProjects\\Doppler_Project\\src\\sample\\tondeuse.mp3"};
+
+
+                /* {"sample/ambulance.mp3","sample/avion.mp3", "sample/fireworks.mp3",
+                "sample/marteaupiqueur.mp3", "sample/tondeuse.mp3"};*/
+
+                /**/
 
 
                 Media[] audios = {new Media(new File(musicFiles[0]).toURI().toString()),
@@ -571,14 +614,25 @@ public class Main extends Application{
 
         retour.setOnAction(event -> {
             primaryStage.setScene(scene);
+            current[0] = 0;
+            currentPage.setImage(tabPages[current[0]]);
+            instructions.setText(tabInstructions[current[0]]);
+            index.setText(" " + (current[0]+1) + " / 7 ");
+            root2.setLeft(info1); root2.setRight(info2);
         });
 
         demarrer.setOnAction(event -> {
             primaryStage.setScene(scene3);
-        });
+            try{ if (mediaPlayer.getMedia()!=null){
+                        silencieux.setGraphic(bruit);
+                        mediaPlayer.setMute(false); }
+            }catch (NullPointerException e){ } });
 
         quitter.setOnAction(event -> {
             primaryStage.setScene(scene);
+        try{ if (mediaPlayer.getMedia()!=null){
+                silencieux.setGraphic(mute); mediaPlayer.setMute(true); }
+            }catch (NullPointerException e){ }
         });
 
         double finalDebutFleche = debutFleche;

@@ -163,11 +163,11 @@ public class Main extends Application{
 
                 "Cliquez sur « Quitter » pour revenir à la page de démarrage tout en gardant \nla simulation active"};
 
-        Label info1 = new Label("À partir de seulement 80 dB \n" +
-                                     "est le niveau auquel les dommages \n" +
-                                     "à l’audition commencent. Cette \n" +
-                                     "intensité est l’équivalent du bruit \n" +
-                                     "moyen de la circulation en ville. ");
+        Label info1 = new Label("À partir de seulement 80 dB, \n" +
+                                     "les dommages à l’audition \n" +
+                                     "commencent. Cette intensité \n" +
+                                     "est l’équivalent du bruit \n" +
+                                     "moyen de la circulation en ville.");
         Label info2 = new Label("Les effets d’une exposition de huit \n" +
                                      "heures par jour deviennent \n" +
                                      "dangereux à long terme pour un \n" +

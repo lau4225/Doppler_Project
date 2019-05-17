@@ -719,7 +719,7 @@ public class Main extends Application{
             doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-            sound(audios[0]);
+            sound(audios[0]);silencieux.setGraphic(bruit);
 
             frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), ambulance.getFrequenceEmise(), vent.getValue());
 
@@ -749,7 +749,7 @@ public class Main extends Application{
             doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-            sound(audios[1]);
+            sound(audios[1]);silencieux.setGraphic(bruit);
 
             frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), avion.getFrequenceEmise(), vent.getValue());
         });
@@ -781,7 +781,7 @@ public class Main extends Application{
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
 
-            sound(audios[2]);
+            sound(audios[2]);silencieux.setGraphic(bruit);
 
            frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), feuxArtifice.getFrequenceEmise(), vent.getValue());
         });
@@ -809,7 +809,7 @@ public class Main extends Application{
             doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-            sound(audios[3]);
+            sound(audios[3]);silencieux.setGraphic(bruit);
 
             frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), marteau.getFrequenceEmise(), vent.getValue());
         });
@@ -837,7 +837,7 @@ public class Main extends Application{
             doppler.Decibels(line, doppler.getSource().getIntensiteEmise());
             frequenceEmiseValue.setText(String.valueOf(doppler.getSource().getFrequenceEmise()));
 
-            sound(audios[4]);
+            sound(audios[4]);silencieux.setGraphic(bruit);
 
             frequenceRep = doppler.frequenceCalc(vitesseE.getValue(), vitesseR.getValue(), tondeuse.getFrequenceEmise(), vent.getValue());
         });

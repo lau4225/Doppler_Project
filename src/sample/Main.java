@@ -433,7 +433,7 @@ public class Main extends Application{
 
         Line horizon = new Line(0,
                 (screenSize.getHeight()- (screenSize.getHeight()/8)),
-                  screenSize.getWidth()- 100,                                 //À ARRANGER ICI PLUS TARD, utiliser les proportions et rectamgles semblables
+                  screenSize.getWidth()- 100,
                 (screenSize.getHeight()-((screenSize.getHeight()/8))));
         horizon.setStroke(Color.CHOCOLATE);
         horizon.setStrokeWidth(screenSize.getHeight()/7);
@@ -598,7 +598,7 @@ public class Main extends Application{
 
 
         //ONACTION
-        guideUti.setOnAction(event -> {                             //A FAIRE ICI LES INSTRUCTIONS
+        guideUti.setOnAction(event -> {
             primaryStage.setScene(scene2);
         });
 
